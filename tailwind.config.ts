@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 const config: Config = {
   content: [
@@ -12,9 +12,13 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        confetti: "url('/confetti.svg')",
       },
+    },
+    animation: {
+      "spin-slow": "spin 128s linear infinite",
     },
   },
   plugins: [],
-};
-export default config;
+}
+export default config
