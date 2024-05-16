@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ClerkProvider } from "@clerk/nextjs";
 import Link from "next/link";
 
-export async function ExternalLayout({
+export async function InternalLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

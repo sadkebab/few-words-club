@@ -1,0 +1,8 @@
+- Cloudflare R2 profile pictures
+- Auth Interface
+- Account Creation
+- Dashboard (following, discover) [time based]
+- Profile
+- Notifications
+- Direct Messages
+- User Reccomendations
