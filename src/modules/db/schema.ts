@@ -13,10 +13,11 @@ const pgTable = pgTableCreator((name) => `fwc_${name}`);
 export const UserData = pgTable(
   "user_data",
   {
-    id: text("id").primaryKey(),
-    clerkId: text("id").notNull(),
+    id: text("id").primaryKey().unique(),
+    clerkId: text("clerk_id").notNull(),
     username: text("username").notNull().unique(),
     picture: text("picture"),
+    banner: text("banner"),
     displayName: text("display_name"),
     bio: text("bio"),
     location: text("location"),
@@ -25,16 +26,16 @@ export const UserData = pgTable(
       .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
-    id: index("ud_id").on(table.id),
+    idIdx: index("ud_id").on(table.id),
     clerkIdIdx: index("ud_clerk_id").on(table.clerkId),
-    username: index("ud_username").on(table.username),
+    usernameIdx: index("ud_username").on(table.username),
   }),
 );
 
 export const Posts = pgTable(
   "posts",
   {
-    id: text("id").primaryKey(),
+    id: text("id").primaryKey().unique(),
     authorId: text("author_id")
       .notNull()
       .references(() => UserData.id),
@@ -46,7 +47,7 @@ export const Posts = pgTable(
     edited: timestamp("edited"),
   },
   (table) => ({
-    id: index("post_id").on(table.id),
+    idIdx: index("post_id").on(table.id),
     authorIdIdx: index("post_author_id").on(table.authorId),
   }),
 );
@@ -57,7 +58,7 @@ export const PostTags = pgTable(
     id: serial("id").primaryKey(),
     postId: text("post_id")
       .notNull()
-      .references(() => Posts.id),
+      .references(() => Posts.id, { onDelete: "cascade" }),
     tag: text("tag").notNull(),
     created: timestamp("created"),
   },
@@ -73,10 +74,10 @@ export const Following = pgTable(
     id: serial("id").primaryKey(),
     followerId: text("follower_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
     followingId: text("following_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
   },
   (table) => ({
     followerIdIdx: index("following_follower_id").on(table.followerId),
@@ -90,10 +91,10 @@ export const Likes = pgTable(
     id: serial("id").primaryKey(),
     postId: text("post_id")
       .notNull()
-      .references(() => Posts.id),
+      .references(() => Posts.id, { onDelete: "cascade" }),
     userId: text("user_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
   },
   (table) => ({
     postIdIdx: index("like_post_id").on(table.postId),
@@ -107,10 +108,10 @@ export const Comments = pgTable(
     id: serial("id").primaryKey(),
     postId: text("post_id")
       .notNull()
-      .references(() => Posts.id),
+      .references(() => Posts.id, { onDelete: "cascade" }),
     authorId: text("author_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
     parentCommentId: integer("parent_comment_id"),
     content: text("content").notNull(),
     created: timestamp("created")
@@ -120,9 +121,6 @@ export const Comments = pgTable(
   (table) => ({
     postIdIdx: index("comment_post_id").on(table.postId),
     authorIdIdx: index("comment_author_id").on(table.authorId),
-    parentCommentIdIdx: index("comment_parent_comment_id").on(
-      table.parentCommentId,
-    ),
   }),
 );
 
@@ -132,10 +130,10 @@ export const DirectMessages = pgTable(
     id: serial("id").primaryKey(),
     senderId: text("sender_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
     recipientId: text("recipient_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
     content: text("content").notNull(),
     created: timestamp("created")
       .notNull()
@@ -153,7 +151,7 @@ export const Notification = pgTable(
     id: serial("id").primaryKey(),
     userId: text("user_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
     content: text("content").notNull(),
     actionUrl: text("action_url").notNull(),
     seen: text("seen").notNull().default("false"),

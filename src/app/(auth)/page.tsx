@@ -12,7 +12,7 @@ import Link from "next/link";
 export default function Home() {
   return (
     <>
-      <div className="fixed -left-1/2 -top-1/2 h-[200vh] w-[200vw] animate-spin-slow bg-confetti bg-cover bg-center bg-no-repeat opacity-70"></div>
+      {/* <div className="fixed -left-1/2 -top-1/2 h-[200vh] w-[200vw] animate-spin-slow bg-confetti bg-cover bg-center bg-no-repeat opacity-70"></div> */}
       <main className="z-10 flex min-h-screen flex-row items-center justify-center p-8">
         <Card backdrop>
           <CardHeader>
