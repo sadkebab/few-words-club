@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { currentUser } from "@clerk/nextjs/server";
-import { Home } from "lucide-react";
-import Link from "next/link";
+// import { Button } from "@/components/ui/button";
+// import { currentUser } from "@clerk/nextjs/server";
+// import { Home } from "lucide-react";
+// import Link from "next/link";
 
 export async function MainLayout({
   children,
@@ -16,22 +16,22 @@ export async function MainLayout({
   );
 }
 
-async function Toolbar() {
-  const user = await currentUser();
-  const isLogged = user !== null;
+// async function Toolbar() {
+//   const user = await currentUser();
+//   const isLogged = user !== null;
 
-  return (
-    <div className="flex flex-col gap-1">
-      <Button asChild>
-        <Link href="/dashboard">
-          <Home /> Feed
-        </Link>
-      </Button>
-      <Button asChild>
-        <Link href="/dashboard">
-          <Home /> Feed
-        </Link>
-      </Button>
-    </div>
-  );
-}
+//   return (
+//     <div className="flex flex-col gap-1">
+//       <Button asChild>
+//         <Link href="/dashboard">
+//           <Home /> Feed
+//         </Link>
+//       </Button>
+//       <Button asChild>
+//         <Link href="/dashboard">
+//           <Home /> Feed
+//         </Link>
+//       </Button>
+//     </div>
+//   );
+// }
