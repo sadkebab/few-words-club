@@ -12,7 +12,6 @@ import { z } from "zod";
 export const saveUserDataAction = authenticatedAction(
   saveUserSchema,
   async ({ username, displayName, country: location, bio }, { user }) => {
-    console.log("hy");
     const id = nanoid();
 
     const result = await db
@@ -26,7 +25,6 @@ export const saveUserDataAction = authenticatedAction(
         bio,
       })
       .returning();
-    console.log("aooo", result);
 
     if (result.length === 0) {
       throw new ActionError("Failed to save user data");
@@ -52,3 +50,5 @@ export const skipMediaOnboardingAction = authenticatedAction(
     return { skipped: result[0]!.id };
   },
 );
+
+//TODO image upload

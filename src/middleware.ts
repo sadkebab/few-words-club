@@ -32,8 +32,6 @@ export default clerkMiddleware(async (auth, req) => {
         where: (UserData, { eq }) => eq(UserData.clerkId, userId),
       });
 
-      // console.log("userData", userData, userId);
-
       if (!userData && !isOnboarding(req)) {
         return NextResponse.redirect(
           `${req.nextUrl.protocol}${req.nextUrl.host}/onboarding`,
@@ -53,6 +51,8 @@ export default clerkMiddleware(async (auth, req) => {
       }
     }
   }
+
+  return NextResponse.next();
 });
 
 export const config = {

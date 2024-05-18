@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   index,
   text,
@@ -39,11 +39,12 @@ export const Posts = pgTable(
     authorId: text("author_id")
       .notNull()
       .references(() => UserData.id),
-    content: text("title").notNull(),
+    content: text("content").notNull(),
     created: timestamp("created")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
     likeCount: integer("like_count").notNull().default(0),
+    saveCount: integer("save_count").notNull().default(0),
     edited: timestamp("edited"),
   },
   (table) => ({
@@ -51,6 +52,13 @@ export const Posts = pgTable(
     authorIdIdx: index("post_author_id").on(table.authorId),
   }),
 );
+
+export const postRelations = relations(Posts, ({ one }) => ({
+  authorData: one(UserData, {
+    fields: [Posts.authorId],
+    references: [UserData.id],
+  }),
+}));
 
 export const PostTags = pgTable(
   "post_tags",
@@ -68,20 +76,42 @@ export const PostTags = pgTable(
   }),
 );
 
-export const Following = pgTable(
-  "following",
+export const PostMentions = pgTable(
+  "post_mentions",
+  {
+    id: serial("id").primaryKey(),
+    postId: text("post_id")
+      .notNull()
+      .references(() => Posts.id, { onDelete: "cascade" }),
+    mentionText: text("mention_text").notNull(),
+    mentionedId: text("mentioned_id")
+      .notNull()
+      .references(() => UserData.id, { onDelete: "cascade" }),
+    created: timestamp("created"),
+  },
+  (table) => ({
+    postIdIdx: index("post_mention_post_id").on(table.postId),
+    mentionedIdIdx: index("post_mention_mentioned_id").on(table.mentionedId),
+  }),
+);
+
+export const Follows = pgTable(
+  "follows",
   {
     id: serial("id").primaryKey(),
     followerId: text("follower_id")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
-    followingId: text("following_id")
+    followedId: text("followed_id")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
+    created: timestamp("created")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
-    followerIdIdx: index("following_follower_id").on(table.followerId),
-    followingIdIdx: index("following_following_id").on(table.followingId),
+    followerIdIdx: index("follows_follower_id").on(table.followerId),
+    followedIdIdx: index("follows_followed_id").on(table.followedId),
   }),
 );
 
@@ -95,6 +125,9 @@ export const Likes = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
+    created: timestamp("created")
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
     postIdIdx: index("like_post_id").on(table.postId),
@@ -102,25 +135,23 @@ export const Likes = pgTable(
   }),
 );
 
-export const Comments = pgTable(
-  "comments",
+export const Saves = pgTable(
+  "saves",
   {
     id: serial("id").primaryKey(),
     postId: text("post_id")
       .notNull()
       .references(() => Posts.id, { onDelete: "cascade" }),
-    authorId: text("author_id")
+    userId: text("user_id")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
-    parentCommentId: integer("parent_comment_id"),
-    content: text("content").notNull(),
     created: timestamp("created")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
-    postIdIdx: index("comment_post_id").on(table.postId),
-    authorIdIdx: index("comment_author_id").on(table.authorId),
+    postIdIdx: index("save_post_id").on(table.postId),
+    userIdIdx: index("save_user_id").on(table.userId),
   }),
 );
 
