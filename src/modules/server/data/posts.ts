@@ -122,23 +122,25 @@ export async function followedFeedPaginated(
 ): Promise<{ data: PostData[]; nextCursor: number | null }> {
   const viewerId = (await safe(currentUserData))?.id;
   const qb = new QueryBuilder();
+  const isSaved = inArray(
+    UserData.id,
+    qb
+      .select({
+        id: Follows.followedId,
+      })
+      .from(Follows)
+      .where(eq(Follows.followerId, userId)),
+  );
   const posts = await postQuery(viewerId)
-    .where(
-      inArray(
-        UserData.id,
-        qb
-          .select({
-            id: Follows.followedId,
-          })
-          .from(Follows)
-          .where(eq(Follows.followerId, userId)),
-      ),
-    )
+    .where(isSaved)
     .orderBy(desc(Posts.created))
     .limit(limit)
     .offset(offset);
 
-  const countRes = await db.select({ count: count() }).from(Posts);
+  const countRes = await db
+    .select({ count: count() })
+    .from(Posts)
+    .where(isSaved);
   const total = countRes[0]?.count ?? 0;
 
   const next = offset + limit;
@@ -168,12 +170,71 @@ export async function savedFeedPaginated(
     .limit(limit)
     .offset(offset);
 
-  const countRes = await db.select({ count: count() }).from(Posts);
+  const countRes = await db
+    .select({ count: count() })
+    .from(Saves)
+    .where(eq(Saves.userId, userId));
   const total = countRes[0]?.count ?? 0;
 
   const next = offset + limit;
 
   return { data: posts, nextCursor: next >= total ? null : next };
+}
+
+export async function likeFeedPaginated(
+  userId: string,
+  limit: number,
+  offset: number,
+): Promise<{ data: PostData[]; nextCursor: number | null }> {
+  const posts = await db
+    .select({
+      id: Posts.id,
+      content: Posts.content,
+      created: Posts.created,
+      likeCount: Posts.likeCount,
+      saveCount: Posts.saveCount,
+      author: {
+        id: UserData.id,
+        username: UserData.username,
+        displayName: UserData.displayName,
+        picture: UserData.picture,
+      },
+    })
+    .from(Likes)
+    .innerJoin(Posts, eq(Likes.postId, Posts.id))
+    .leftJoin(UserData, eq(Posts.authorId, UserData.id))
+    .where(eq(Likes.userId, userId))
+    .orderBy(desc(Likes.created))
+    .limit(limit)
+    .offset(offset);
+
+  const postIds = posts.map((post) => post.id);
+
+  const userLikes = await db
+    .select({ postId: Likes.postId })
+    .from(Likes)
+    .where(inArray(Likes.postId, postIds));
+
+  const userSaves = await db
+    .select({ postId: Saves.postId })
+    .from(Saves)
+    .where(inArray(Saves.postId, postIds));
+
+  const updated = posts.map((post) => {
+    const liked = userLikes.some((like) => like.postId === post.id);
+    const saved = userSaves.some((save) => save.postId === post.id);
+    return { ...post, liked, saved };
+  });
+
+  const countRes = await db
+    .select({ count: count() })
+    .from(Likes)
+    .where(eq(Likes.userId, userId));
+  const total = countRes[0]?.count ?? 0;
+
+  const next = offset + limit;
+
+  return { data: updated, nextCursor: next >= total ? null : next };
 }
 
 export type PostData = Awaited<
