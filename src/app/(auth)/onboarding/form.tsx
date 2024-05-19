@@ -36,7 +36,7 @@ export function OnboardingForm() {
         title: "Account created.",
         description: "Wellcome to the Few Words Club!",
       });
-      router.push("/dashboard");
+      router.push("/feed");
     }
   }, [data, router]);
 

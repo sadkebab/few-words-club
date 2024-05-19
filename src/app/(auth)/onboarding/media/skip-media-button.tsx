@@ -18,9 +18,9 @@ export function SkipMediaButton(props: ActionButtonProps) {
     if (data) {
       toast({
         title: "Skipped",
-        description: "Redirecting to dashboard",
+        description: "Redirecting to the feed page",
       });
-      router.push("/dashboard");
+      router.push("/feed");
     }
   }, [data, router, props]);
 

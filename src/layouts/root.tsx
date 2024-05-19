@@ -20,8 +20,8 @@ export function RootLayout({
           <ClerkProvider
             signInUrl="/sign-in"
             signUpUrl="/sign-up"
-            signInForceRedirectUrl="/dashboard"
-            signUpForceRedirectUrl="/dashboard"
+            signInForceRedirectUrl="/feed"
+            signUpForceRedirectUrl="/feed"
           >
             <TRPCReactProvider cookies={cookie}>{children}</TRPCReactProvider>
           </ClerkProvider>

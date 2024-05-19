@@ -3,11 +3,12 @@ import { db } from "./modules/db";
 import { NextResponse } from "next/server";
 
 const isProtectedRoute = createRouteMatcher([
-  "/dashboard(.*)",
+  "/feed(.*)",
+  "/followed-user-feed(.*)",
   "/messages(.*)",
+  "/trending(.*)",
   "/notifications(.*)",
   "/profile(.*)",
-  "/settings(.*)",
   "/onboarding(.*)",
 ]);
 
@@ -19,7 +20,7 @@ const isHome = createRouteMatcher(["/"]);
 export default clerkMiddleware(async (auth, req) => {
   if (isHome(req) && auth().userId) {
     return NextResponse.redirect(
-      `${req.nextUrl.protocol}${req.nextUrl.host}/dashboard`,
+      `${req.nextUrl.protocol}${req.nextUrl.host}/feed`,
     );
   }
 
@@ -40,7 +41,7 @@ export default clerkMiddleware(async (auth, req) => {
 
       if (userData && isOnboarding(req)) {
         return NextResponse.redirect(
-          `${req.nextUrl.protocol}${req.nextUrl.host}/dashboard`,
+          `${req.nextUrl.protocol}${req.nextUrl.host}/feed`,
         );
       }
 

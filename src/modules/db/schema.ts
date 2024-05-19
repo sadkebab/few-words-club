@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  boolean,
   index,
   text,
   pgTableCreator,
@@ -166,6 +167,7 @@ export const DirectMessages = pgTable(
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
     content: text("content").notNull(),
+    seen: boolean("seen").notNull().default(false),
     created: timestamp("created")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
@@ -176,7 +178,7 @@ export const DirectMessages = pgTable(
   }),
 );
 
-export const Notification = pgTable(
+export const Notifications = pgTable(
   "notifications",
   {
     id: serial("id").primaryKey(),
@@ -185,7 +187,7 @@ export const Notification = pgTable(
       .references(() => UserData.id, { onDelete: "cascade" }),
     content: text("content").notNull(),
     actionUrl: text("action_url").notNull(),
-    seen: text("seen").notNull().default("false"),
+    seen: boolean("seen").notNull().default(false),
     updated: timestamp("updated")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),

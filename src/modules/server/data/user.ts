@@ -2,8 +2,8 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "../../db";
-import { eq, count } from "drizzle-orm";
-import { Follows } from "../../db/schema";
+import { eq, count, and } from "drizzle-orm";
+import { DirectMessages, Follows, Notifications } from "../../db/schema";
 
 export async function userDataWithStats(userId?: string) {
   const actualUserId = userId ?? (await currentUserId());
@@ -62,4 +62,28 @@ export async function userFollowers(userId: string) {
     .from(Follows)
     .where(eq(Follows.followedId, userId));
   return followers[0]?.count ?? 0;
+}
+
+export async function unreadCounter(userId: string) {
+  const notifications = await db
+    .select({ count: count() })
+    .from(Notifications)
+    .where(
+      and(eq(Notifications.userId, userId), eq(Notifications.seen, false)),
+    );
+
+  const messages = await db
+    .select({ count: count() })
+    .from(DirectMessages)
+    .where(
+      and(
+        eq(DirectMessages.recipientId, userId),
+        eq(DirectMessages.seen, false),
+      ),
+    );
+
+  return {
+    notifications: notifications[0]?.count ?? 0,
+    messages: messages[0]?.count ?? 0,
+  };
 }

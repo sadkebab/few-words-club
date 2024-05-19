@@ -5,6 +5,7 @@ import { createContext, useContext } from "react";
 const PostContext = createContext<
   | {
       viewerId: string | undefined;
+      cursorDate: Date;
     }
   | undefined
 >(undefined);
@@ -12,12 +13,16 @@ const PostContext = createContext<
 export function PostContextProvider({
   children,
   viewerId,
+  cursorDate,
 }: {
   children: React.ReactNode;
   viewerId: string | undefined;
+  cursorDate: Date;
 }) {
   return (
-    <PostContext.Provider value={{ viewerId }}>{children}</PostContext.Provider>
+    <PostContext.Provider value={{ viewerId, cursorDate }}>
+      {children}
+    </PostContext.Provider>
   );
 }
 

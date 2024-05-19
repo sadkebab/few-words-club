@@ -1,10 +1,10 @@
 "use server";
 import { db } from "@/modules/db";
-import { Likes, Posts, Saves, UserData } from "../../db/schema";
-import { count, eq, desc, and, sql } from "drizzle-orm";
+import { Follows, Likes, Posts, Saves, UserData } from "../../db/schema";
+import { count, eq, desc, and, sql, inArray } from "drizzle-orm";
 import { currentUserData } from "./user";
 import { safe } from "@/lib/safe-actions";
-import { unstable_noStore } from "next/cache";
+import { QueryBuilder } from "drizzle-orm/pg-core";
 
 function postQuery(viewerId?: string) {
   return db
@@ -41,7 +41,6 @@ export async function userPostsPaginated(
   limit: number,
   offset: number,
 ) {
-  unstable_noStore();
   const viewerId = (await safe(currentUserData))?.id;
 
   const posts = await postQuery(viewerId)
@@ -71,6 +70,56 @@ export async function singlePost(postId: string): Promise<PostData> {
   }
 
   return posts[0]!;
+}
+
+export async function publicFeedPaginated(
+  limit: number,
+  offset: number,
+): Promise<{ data: PostData[]; nextCursor: number | null }> {
+  const viewerId = (await safe(currentUserData))?.id;
+
+  const posts = await postQuery(viewerId)
+    .orderBy(desc(Posts.created))
+    .limit(limit)
+    .offset(offset);
+
+  const countRes = await db.select({ count: count() }).from(Posts);
+  const total = countRes[0]?.count ?? 0;
+
+  const next = offset + limit;
+
+  return { data: posts, nextCursor: next >= total ? null : next };
+}
+
+export async function followedFeedPaginated(
+  userId: string,
+  limit: number,
+  offset: number,
+): Promise<{ data: PostData[]; nextCursor: number | null }> {
+  const viewerId = (await safe(currentUserData))?.id;
+  const qb = new QueryBuilder();
+  const posts = await postQuery(viewerId)
+    .where(
+      inArray(
+        UserData.id,
+        qb
+          .select({
+            id: Follows.followedId,
+          })
+          .from(Follows)
+          .where(eq(Follows.followerId, userId)),
+      ),
+    )
+    .orderBy(desc(Posts.created))
+    .limit(limit)
+    .offset(offset);
+
+  const countRes = await db.select({ count: count() }).from(Posts);
+  const total = countRes[0]?.count ?? 0;
+
+  const next = offset + limit;
+
+  return { data: posts, nextCursor: next >= total ? null : next };
 }
 
 export type PostData = Awaited<

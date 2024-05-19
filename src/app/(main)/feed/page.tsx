@@ -1,15 +1,16 @@
-import { currentUserData } from "@/modules/server/data/user";
-import { UserPosts } from "../../../components/posts/user-posts";
 import { PostContextProvider } from "@/components/posts/context";
+import { PublicFeed } from "@/components/posts/feed";
+import { safe } from "@/lib/safe-actions";
+import { currentUserData } from "@/modules/server/data/user";
 
 const PAGE_SIZE = 30;
 export default async function Page() {
-  const id = (await currentUserData()).id;
+  const id = (await safe(currentUserData))?.id;
   const cursorDate = new Date();
 
   return (
     <PostContextProvider viewerId={id} cursorDate={cursorDate}>
-      <UserPosts userId={id} pageSize={PAGE_SIZE} />
+      <PublicFeed pageSize={PAGE_SIZE} />
     </PostContextProvider>
   );
 }

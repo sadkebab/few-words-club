@@ -18,6 +18,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { api } from "@/modules/trpc/react";
 import { Skeleton } from "../ui/skeleton";
+import { humanDateDiff } from "@/lib/react/date";
+import { CounterLabel } from "../counter";
+import Link from "next/link";
 
 export function Post({ postData }: { postData: PostData }) {
   const { data: post, refetch } = api.posts.single.useQuery(
@@ -33,7 +36,7 @@ export function Post({ postData }: { postData: PostData }) {
   const abort = async () => {
     await utils.posts.single.cancel();
   };
-  const { viewerId } = usePostContext();
+  const { viewerId, cursorDate } = usePostContext();
   const canEdit = viewerId === post.author?.id;
 
   return (
@@ -48,7 +51,10 @@ export function Post({ postData }: { postData: PostData }) {
           </Avatar>
           <div className="flex flex-col leading-none">
             <h3 className="font-medium">{post.author?.displayName}</h3>
-            <h4 className="text-sm font-light">@{post.author?.username}</h4>
+            <p className="text-sm font-light">
+              @{post.author?.username} ·{" "}
+              {humanDateDiff(post.created, cursorDate)}
+            </p>
           </div>
         </div>
         {canEdit && (
@@ -59,28 +65,44 @@ export function Post({ postData }: { postData: PostData }) {
       </CardHeader>
       <CardContent>{post.content}</CardContent>
       <CardFooter className="flex gap-1">
-        <LikeButton
-          liked={post.liked}
-          postId={post.id}
-          count={post.likeCount}
-          refetch={refetch}
-          abort={abort}
-        />
-        <SaveButton
-          saved={post.saved}
-          postId={post.id}
-          count={post.saveCount}
-          refetch={refetch}
-          abort={abort}
-        />
+        {viewerId ? (
+          <>
+            <LikeButton
+              liked={post.liked}
+              postId={post.id}
+              count={post.likeCount}
+              refetch={refetch}
+              abort={abort}
+            />
+            <SaveButton
+              saved={post.saved}
+              postId={post.id}
+              count={post.saveCount}
+              refetch={refetch}
+              abort={abort}
+            />{" "}
+          </>
+        ) : (
+          <>
+            <Button variant={"ghost"} size={"icon"} asChild>
+              <Link href="/sign-in">
+                <Heart />
+              </Link>
+            </Button>
+            <CounterLabel count={post.likeCount} />
+            <Button variant={"ghost"} size={"icon"} asChild>
+              <Link href="/sign-in">
+                <Bookmark />
+              </Link>
+            </Button>
+            <CounterLabel count={post.saveCount} />
+          </>
+        )}
       </CardFooter>
     </div>
   );
 }
 
-function Counter({ count }: { count: number }) {
-  return <span className="text-lg font-medium">{count}</span>;
-}
 function LikeButton({
   liked,
   postId,
@@ -186,12 +208,12 @@ function LikeButton({
     <>
       <Button variant={"ghost"} size={"icon"} onClick={action}>
         {optimisticLike ? (
-          <Heart className="fill-red-500 stroke-red-400" />
+          <Heart className="fill-red-500 stroke-red-500" />
         ) : (
           <Heart />
         )}
       </Button>
-      <Counter count={optimisticCount} />
+      <CounterLabel count={optimisticCount} />
     </>
   );
 }
@@ -300,9 +322,13 @@ function SaveButton({
   return (
     <>
       <Button variant={"ghost"} size={"icon"} onClick={action}>
-        {optimisticSave ? <Bookmark className="fill-black" /> : <Bookmark />}
+        {optimisticSave ? (
+          <Bookmark className="fill-black dark:fill-white" />
+        ) : (
+          <Bookmark />
+        )}
       </Button>
-      <Counter count={optimisticCount} />
+      <CounterLabel count={optimisticCount} />
     </>
   );
 }

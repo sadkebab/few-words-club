@@ -2,20 +2,17 @@
 
 import { Fragment, useEffect } from "react";
 import { Post, PostSkeleton } from "./post";
-import { TriangleAlert } from "lucide-react";
 import { api } from "@/modules/trpc/react";
-import { useTriggerOnViewportEntrance as useTriggerOnViewportEntrance } from "@/lib/react/viewport";
 import { toast } from "../ui/use-toast";
-// import { type RouterOutput } from "@/modules/server/api/root";
+import { QueryTrigger } from "./trigger";
+import { IssuePlaceholder } from "./issue-placeholder";
 
 export function UserPosts({
   userId,
   pageSize,
-  // initialData,
 }: {
   userId: string;
   pageSize: number;
-  // initialData: RouterOutput["posts"]["forUser"];
 }) {
   const { data, error, fetchNextPage, hasNextPage, status } =
     api.posts.forUser.useInfiniteQuery(
@@ -24,7 +21,6 @@ export function UserPosts({
         pageSize,
       },
       {
-        // initialData: { pages: [initialData], pageParams: [undefined] },
         getNextPageParam: (lastPage) => lastPage.nextCursor,
       },
     );
@@ -44,38 +40,27 @@ export function UserPosts({
       <PostSkeleton />
     </div>
   ) : status === "error" ? (
-    <div className="flex justify-center space-y-4 divide-y border-t p-24">
-      <TriangleAlert className="size-24 stroke-muted" />
-    </div>
+    <IssuePlaceholder />
   ) : (
-    <div className="space-y-4 divide-y border-t">
-      {data.pages.map((group, i) => (
-        <Fragment key={i}>
-          {group.data.map((post) => (
-            <Post postData={post} key={post.id} />
+    <div className="flex w-full">
+      {!hasNextPage && data.pages[0]?.data.length === 0 ? (
+        <div className="flex w-full items-center justify-center border-t p-4">
+          <p>No posts yet.</p>
+        </div>
+      ) : (
+        <div className="w-full space-y-4 divide-y border-t">
+          {data.pages.map((group, i) => (
+            <Fragment key={i}>
+              {group.data.map((post) => (
+                <Post postData={post} key={post.id} />
+              ))}
+            </Fragment>
           ))}
-        </Fragment>
-      ))}
-      {hasNextPage && (
-        <QueryTrigger fetchNext={() => fetchNextPage()}></QueryTrigger>
+          {hasNextPage && (
+            <QueryTrigger fetchNext={() => fetchNextPage()}></QueryTrigger>
+          )}
+        </div>
       )}
-    </div>
-  );
-}
-
-function QueryTrigger({
-  fetchNext,
-  children,
-  className,
-}: {
-  fetchNext: () => void;
-  children?: React.ReactNode;
-  className?: string;
-}) {
-  const { ref } = useTriggerOnViewportEntrance(fetchNext);
-  return (
-    <div ref={ref} className={className}>
-      {children}
     </div>
   );
 }

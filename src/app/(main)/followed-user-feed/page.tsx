@@ -1,6 +1,6 @@
-import { currentUserData } from "@/modules/server/data/user";
-import { UserPosts } from "../../../components/posts/user-posts";
 import { PostContextProvider } from "@/components/posts/context";
+import { FollowedFeed } from "@/components/posts/feed";
+import { currentUserData } from "@/modules/server/data/user";
 
 const PAGE_SIZE = 30;
 export default async function Page() {
@@ -9,7 +9,7 @@ export default async function Page() {
 
   return (
     <PostContextProvider viewerId={id} cursorDate={cursorDate}>
-      <UserPosts userId={id} pageSize={PAGE_SIZE} />
+      <FollowedFeed userId={id} pageSize={PAGE_SIZE} />
     </PostContextProvider>
   );
 }

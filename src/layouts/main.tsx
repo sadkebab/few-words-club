@@ -1,13 +1,26 @@
 import { Button } from "@/components/ui/button";
-import { currentUser } from "@clerk/nextjs/server";
-import { Bell, Home, Mail, Bookmark, Cog, User, Search } from "lucide-react";
+import {
+  Bell,
+  Mail,
+  Bookmark,
+  Cog,
+  User,
+  Search,
+  Globe2,
+  UsersRound,
+  TrendingUp,
+  Origami,
+} from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SignOutButton } from "@/components/sign-out-button";
 import { ToolbarButton } from "@/components/client-buttons";
 import { Fonts } from "@/lib/fonts";
-import { db } from "@/modules/db";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+
+import { currentUserData, unreadCounter } from "@/modules/server/data/user";
+import { safe } from "@/lib/safe-actions";
+import { Badge } from "@/components/ui/badge";
 
 export async function MainLayout({
   children,
@@ -36,12 +49,13 @@ export async function MainLayout({
 }
 
 async function Toolbar() {
-  const user = await currentUser();
+  const userData = await safe(currentUserData);
 
-  if (user === null) {
+  if (userData === undefined) {
     return (
       <div className="flex flex-1 flex-col justify-between gap-1">
         <div className="flex flex-col gap-1 space-y-2 p-4">
+          <Origami />
           <p style={Fonts.Syne_Mono.style} className="text-xl">
             Looks like you are not a club member.
           </p>
@@ -59,43 +73,45 @@ async function Toolbar() {
     );
   }
 
-  const userData = await db.query.UserData.findFirst({
-    where: (data, cmp) => cmp.eq(data.clerkId, user.id),
-  });
+  const unread = await unreadCounter(userData.id);
 
-  const userDisplay =
-    userData !== undefined ? (
-      <div className="flex items-center gap-4">
-        <Avatar className="size-12">
-          <AvatarImage src={userData.picture ?? "/default_thumb.png"} />
-          <AvatarFallback>{userData.displayName?.slice(0, 2)}</AvatarFallback>
-        </Avatar>
-        <div className="flex-1">
-          <p className="text font-medium">{userData.displayName}</p>
-          <p className="text-sm font-light text-muted-foreground">
-            @{userData.username}
-          </p>
-        </div>
+  const userDisplay = (
+    <div className="flex items-center gap-4">
+      <Avatar className="size-12">
+        <AvatarImage src={userData.picture ?? "/default_thumb.png"} />
+        <AvatarFallback>{userData.displayName?.slice(0, 2)}</AvatarFallback>
+      </Avatar>
+      <div className="flex-1">
+        <p className="text font-medium">{userData.displayName}</p>
+        <p className="text-sm font-light text-muted-foreground">
+          @{userData.username}
+        </p>
       </div>
-    ) : (
-      <p>user data not found</p>
-    );
+    </div>
+  );
 
   return (
     <div className="flex flex-1 flex-col justify-between gap-1">
       <div className="flex flex-1 flex-col justify-between p-4">
         <div className="flex flex-col gap-1">
-          <ToolbarButton href="/dashboard">
-            Feed <Home />
+          <ToolbarButton href="/feed">
+            Public Feed <Globe2 />
           </ToolbarButton>
-          <ToolbarButton href="/notifications">
-            Notifications <Bell />
+          <ToolbarButton href="/followed-user-feed">
+            People You Follow <UsersRound />
           </ToolbarButton>
-          <ToolbarButton href="/messages">
-            Messages <Mail />
+          <ToolbarButton href="/trending">
+            Trending <TrendingUp />
           </ToolbarButton>
           <ToolbarButton href="/saved">
             Saved <Bookmark />
+          </ToolbarButton>
+          <ToolbarButton href="/messages">
+            <Counter count={unread.messages}>Messages</Counter>
+            <Mail />
+          </ToolbarButton>
+          <ToolbarButton href="/notifications">
+            Notifications <Bell />
           </ToolbarButton>
           <ToolbarButton href="/profile">
             Profile <User />
@@ -114,17 +130,39 @@ async function Toolbar() {
         <div className="flex justify-between">
           <div className="flex gap-1">
             <Button variant={"outline"} size={"icon"} asChild>
-              <Link href="/settings">
+              <Link href="/about">
                 <Cog />
               </Link>
             </Button>
+
             <ThemeToggle />
           </div>
-          <SignOutButton className="w-fit" variant={"outline"}>
-            Sign Out
-          </SignOutButton>
+          <div className="flex gap-1">
+            <SignOutButton className="w-fit" variant={"outline"}>
+              Sign Out
+            </SignOutButton>
+          </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Counter({
+  count,
+  children,
+}: {
+  count: number;
+  children: React.ReactNode;
+}) {
+  if (count === 0) {
+    return <>{children}</>;
+  }
+
+  return (
+    <div className="flex gap-1">
+      {children}
+      <Badge>{count}</Badge>
     </div>
   );
 }
