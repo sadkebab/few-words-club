@@ -70,7 +70,7 @@ function PostLikes({
       </div>
     </div>
   ) : status === "error" ? (
-    <IssuePlaceholder />
+    <IssuePlaceholder className="p-8" />
   ) : (
     <div className="flex w-full">
       {!hasNextPage && data.pages[0]?.data.length === 0 ? (

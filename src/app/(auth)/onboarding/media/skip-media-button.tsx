@@ -27,7 +27,7 @@ export function SkipMediaButton({
         title: "Skipped",
         description: "Redirecting to the feed page",
       });
-      router.push("/feed");
+      router.refresh();
     },
     onError: ({ fetchError, serverError, validationErrors }) => {
       if (serverError) {

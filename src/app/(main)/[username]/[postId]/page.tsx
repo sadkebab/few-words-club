@@ -1,8 +1,8 @@
 import { safe } from "@/lib/safe-actions";
 import { userPost } from "@/modules/server/data/posts";
 import { currentUserData, usernameId } from "@/modules/server/data/users";
-import { Ghost } from "lucide-react";
 import { PostView } from "./client";
+import { GhostPlaceholder } from "@/components/ghost-placeholder";
 
 export default async function Page({
   params: { username, postId },
@@ -12,38 +12,21 @@ export default async function Page({
   const userId = await safe(() => usernameId(username));
 
   if (userId === undefined) {
-    return (
-      <div className="flex w-full flex-1 items-center justify-center">
-        <div className="flex flex-col items-center justify-between">
-          <Ghost className="size-[2.5rem] animate-bounce stroke-muted-foreground" />
-          <p className="text-lg font-medium text-muted-foreground">
-            User not found.
-          </p>
-        </div>
-      </div>
-    );
+    return <GhostPlaceholder>User not found.</GhostPlaceholder>;
   }
+
   const [viewer, post] = await Promise.all([
-    currentUserData(),
+    safe(currentUserData),
     userPost(userId, postId),
   ]);
 
   if (!post) {
-    return (
-      <div className="flex w-full flex-1 items-center justify-center">
-        <div className="flex flex-col items-center justify-between">
-          <Ghost className="size-[2.5rem] animate-bounce stroke-muted-foreground" />
-          <p className="text-lg font-medium text-muted-foreground">
-            Post not found.
-          </p>
-        </div>
-      </div>
-    );
+    return <GhostPlaceholder>Post not found.</GhostPlaceholder>;
   }
 
   return (
     <div className="w-full">
-      <PostView viewerId={viewer.id} postData={post} />
+      <PostView viewerId={viewer?.id ?? ""} postData={post} />
     </div>
   );
 }

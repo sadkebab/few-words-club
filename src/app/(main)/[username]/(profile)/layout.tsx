@@ -10,8 +10,8 @@ import { Suspense } from "react";
 import { FollowButton } from "@/components/profile/follow-unfollow";
 import { DummyFollow } from "@/components/profile/dummy-follow";
 import Link from "next/link";
-import { Ghost } from "lucide-react";
-import { DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { DEFAULT_BANNER, DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { GhostPlaceholder } from "@/components/ghost-placeholder";
 
 export default async function Layout({
   children,
@@ -25,26 +25,16 @@ export default async function Layout({
     safe(currentUserData),
   ]);
 
-  console.log("target", target);
   if (target === undefined) {
     //FIX ME not-found.tsx not working???
-    return (
-      <div className="flex w-full flex-1 items-center justify-center">
-        <div className="flex flex-col items-center justify-between">
-          <Ghost className="size-[2.5rem] animate-bounce stroke-muted-foreground" />
-          <p className="text-lg font-medium text-muted-foreground">
-            Page not found.
-          </p>
-        </div>
-      </div>
-    );
+    return <GhostPlaceholder>Page not found.</GhostPlaceholder>;
   }
 
   const { userData, followers, follows } = target;
 
   const isProfile = target.userData.id === viewer?.id;
 
-  const backgroundImage = `url('${userData.banner ?? "/default_banner.png"}')`;
+  const backgroundImage = `url('${userData.banner ?? DEFAULT_BANNER}')`;
   return (
     <div className="flex-1t flex w-full flex-col">
       <div className="w-full bg-cover bg-center" style={{ backgroundImage }}>

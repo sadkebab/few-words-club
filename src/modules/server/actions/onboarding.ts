@@ -1,4 +1,5 @@
 "use server";
+import { DEFAULT_BANNER, DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { SaveUserSchema } from "../validators/onboarding";
 import { authenticatedAction } from "@/lib/safe-actions";
 import { ActionError } from "@/lib/safe-actions/error";
@@ -13,7 +14,7 @@ export const saveUserDataAction = authenticatedAction(
   SaveUserSchema,
   async ({ username, displayName, country: location, bio }, { user }) => {
     const id = nanoid();
-
+    console.log("location", location);
     const result = await db
       .insert(UserData)
       .values({
@@ -39,7 +40,7 @@ export const skipMediaOnboardingAction = authenticatedAction(
   async (_, { user }) => {
     const result = await db
       .update(UserData)
-      .set({ picture: "default_thumb.png", banner: "default_banner.png" })
+      .set({ picture: DEFAULT_THUMBNAIL, banner: DEFAULT_BANNER })
       .where(eq(UserData.clerkId, user.id))
       .returning();
 

@@ -24,12 +24,15 @@ type ComboboxProps = React.ComponentProps<typeof CommandInput> & {
   options: { value: string; label: string; icon?: React.ReactNode }[];
   emptyText?: string;
   selectText?: string;
+  onChange: (value: string | undefined) => void;
 };
 
 export function Combobox({
   options,
   emptyText,
   selectText,
+  onChange,
+  value: _,
   ...props
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
@@ -71,7 +74,9 @@ export function Combobox({
                 key={option.value}
                 value={option.label}
                 onSelect={() => {
-                  setValue(option.value === value ? "" : option.value);
+                  const isRemoving = option.value === value;
+                  setValue(isRemoving ? "" : option.value);
+                  onChange(isRemoving ? undefined : option.value);
                   setOpen(false);
                 }}
               >

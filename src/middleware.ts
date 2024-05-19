@@ -50,6 +50,12 @@ export default clerkMiddleware(async (auth, req) => {
           `${req.nextUrl.protocol}${req.nextUrl.host}/onboarding/media`,
         );
       }
+
+      if (userData?.picture && isOnboardingMedia(req)) {
+        return NextResponse.redirect(
+          `${req.nextUrl.protocol}${req.nextUrl.host}/feed`,
+        );
+      }
     }
   }
 
