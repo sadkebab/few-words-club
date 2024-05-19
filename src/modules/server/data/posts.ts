@@ -36,6 +36,30 @@ function postQuery(viewerId?: string) {
     .$dynamic();
 }
 
+function savedPostQuery(userId: string) {
+  return db
+    .select({
+      id: Posts.id,
+      content: Posts.content,
+      created: Posts.created,
+      likeCount: Posts.likeCount,
+      saveCount: Posts.saveCount,
+      author: {
+        id: UserData.id,
+        username: UserData.username,
+        displayName: UserData.displayName,
+        picture: UserData.picture,
+      },
+      liked: sql<boolean>`(${Likes.id}) is not null`,
+      saved: sql<boolean>`(${Saves.id}) is not null`,
+    })
+    .from(Saves)
+    .innerJoin(Posts, eq(Saves.postId, Posts.id))
+    .leftJoin(UserData, eq(Posts.authorId, UserData.id))
+    .leftJoin(Likes, and(eq(Posts.id, Likes.postId), eq(Likes.userId, userId)))
+    .$dynamic();
+}
+
 export async function userPostsPaginated(
   userId: string,
   limit: number,
@@ -108,6 +132,36 @@ export async function followedFeedPaginated(
           })
           .from(Follows)
           .where(eq(Follows.followerId, userId)),
+      ),
+    )
+    .orderBy(desc(Posts.created))
+    .limit(limit)
+    .offset(offset);
+
+  const countRes = await db.select({ count: count() }).from(Posts);
+  const total = countRes[0]?.count ?? 0;
+
+  const next = offset + limit;
+
+  return { data: posts, nextCursor: next >= total ? null : next };
+}
+
+export async function savedFeedPaginated(
+  userId: string,
+  limit: number,
+  offset: number,
+): Promise<{ data: PostData[]; nextCursor: number | null }> {
+  const qb = new QueryBuilder();
+  const posts = await savedPostQuery(userId)
+    .where(
+      inArray(
+        Posts.id,
+        qb
+          .select({
+            id: Saves.postId,
+          })
+          .from(Saves)
+          .where(eq(Saves.userId, userId)),
       ),
     )
     .orderBy(desc(Posts.created))

@@ -1,13 +1,13 @@
 "use client";
 
 import { Fragment, useEffect } from "react";
-import { Post, PostSkeleton } from "./post";
+import { Post, PostSkeleton } from "../post";
 import { api } from "@/modules/trpc/react";
-import { toast } from "../ui/use-toast";
-import { QueryTrigger } from "./trigger";
-import { IssuePlaceholder } from "./issue-placeholder";
+import { toast } from "@/components/ui/use-toast";
+import { QueryTrigger } from "../trigger";
+import { IssuePlaceholder } from "../issue-placeholder";
 
-export function UserPosts({
+export function UserFeed({
   userId,
   pageSize,
 }: {
@@ -27,7 +27,6 @@ export function UserPosts({
 
   useEffect(() => {
     if (status === "error") {
-      console.error(error);
       toast({
         title: "Failed to load posts",
         description: error.message,
@@ -56,9 +55,11 @@ export function UserPosts({
               ))}
             </Fragment>
           ))}
-          {hasNextPage && (
-            <QueryTrigger fetchNext={() => fetchNextPage()}></QueryTrigger>
-          )}
+          <div>
+            {hasNextPage && (
+              <QueryTrigger fetchNext={() => fetchNextPage()}></QueryTrigger>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -1,5 +1,5 @@
 import { PostContextProvider } from "@/components/post/context";
-import { FollowedFeed } from "@/components/post/feed";
+import { FollowedFeed } from "@/components/post/feeds/followed";
 import { currentUserData } from "@/modules/server/data/user";
 
 const PAGE_SIZE = 30;

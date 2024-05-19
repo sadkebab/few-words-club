@@ -1,3 +1,16 @@
+import { PostContextProvider } from "@/components/post/context";
+import { SavedFeed } from "@/components/post/feeds/saved";
+import { safe } from "@/lib/safe-actions";
+import { currentUserData } from "@/modules/server/data/user";
+
+const PAGE_SIZE = 30;
 export default async function Page() {
-  return <></>;
+  const id = (await safe(currentUserData))?.id;
+  const cursorDate = new Date();
+
+  return (
+    <PostContextProvider viewerId={id} cursorDate={cursorDate}>
+      <SavedFeed pageSize={PAGE_SIZE} />
+    </PostContextProvider>
+  );
 }

@@ -1,7 +1,12 @@
-import { createTRPCRouter, publicProcedure } from "@/modules/server/api/trpc";
+import {
+  createTRPCRouter,
+  publicProcedure,
+  userProcedure,
+} from "@/modules/server/api/trpc";
 import {
   followedFeedPaginated,
   publicFeedPaginated,
+  savedFeedPaginated,
   singlePost,
   userPostsPaginated,
 } from "@/modules/server/data/posts";
@@ -50,6 +55,18 @@ export const postsRouter = createTRPCRouter({
     .query(async ({ input }) => {
       const { cursor, pageSize, userId } = input;
       const res = await followedFeedPaginated(userId, pageSize, cursor ?? 0);
+      return res;
+    }),
+  savedFeed: userProcedure
+    .input(
+      z.object({
+        pageSize: z.number(),
+        cursor: z.number().nullish(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const { cursor, pageSize } = input;
+      const res = await savedFeedPaginated(ctx.user.id, pageSize, cursor ?? 0);
       return res;
     }),
 });
