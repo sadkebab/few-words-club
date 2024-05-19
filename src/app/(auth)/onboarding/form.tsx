@@ -139,7 +139,7 @@ export function OnboardingForm() {
                           countryCode={x.iso}
                           svg
                           className="size-4"
-                          title="US"
+                          title={x.name}
                         />
                       ),
                     }))}

@@ -12,6 +12,9 @@ import { DummyFollow } from "@/components/profile/dummy-follow";
 import Link from "next/link";
 import { DEFAULT_BANNER, DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { GhostPlaceholder } from "@/components/ghost-placeholder";
+import countries from "@/lib/utils/countries";
+import { Globe2 } from "lucide-react";
+import ReactCountryFlag from "react-country-flag";
 
 export default async function Layout({
   children,
@@ -61,7 +64,8 @@ export default async function Layout({
             )}
             <div className="mt-4 flex flex-col items-center">
               <p className="text-xs font-medium">Location</p>
-              <h3 className="text-sm">{userData.location ?? "Unknown"}</h3>
+              <CountryDisplay location={userData.location} />
+              {/* <h3 className="text-sm">{userData.location ?? "Unknown"}</h3> */}
             </div>
             <div className="flex flex-col items-center">
               <p className="text-xs font-medium">Bio</p>
@@ -88,6 +92,30 @@ export default async function Layout({
       </div>
       <div className="mt-8 flex-1">{children}</div>
     </div>
+  );
+}
+
+function CountryDisplay({ location }: { location: string | null }) {
+  const country = countries.find((c) => c.iso === location);
+
+  if (!country) {
+    return (
+      <h3 className="flex items-center gap-1 text-sm">
+        Somewhere <Globe2 className="size-4" />
+      </h3>
+    );
+  }
+
+  return (
+    <h3 className="flex items-center gap-1 text-sm">
+      {country.name}{" "}
+      <ReactCountryFlag
+        countryCode={country.iso}
+        svg
+        className="size-4"
+        title={country.name}
+      />
+    </h3>
   );
 }
 
