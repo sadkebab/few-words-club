@@ -21,6 +21,7 @@ import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { currentUserData, unreadCounter } from "@/modules/server/data/user";
 import { safe } from "@/lib/safe-actions";
 import { Badge } from "@/components/ui/badge";
+import { CreatePostButton } from "@/components/post/create-post-button";
 
 export async function MainLayout({
   children,
@@ -120,9 +121,7 @@ async function Toolbar() {
             Search <Search />
           </ToolbarButton>
         </div>
-        <Button variant={"default"} size={"lg"}>
-          Create Post
-        </Button>
+        <CreatePostButton />
       </div>
 
       <div className="flex flex-col gap-4 border-t p-4">

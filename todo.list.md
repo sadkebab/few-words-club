@@ -1,6 +1,5 @@
 - Cloudflare R2 profile pictures
 - Profile Picture Upload
-- Dashboard (following, discover) [time based]
 - Profile
 - Notifications
 - Direct Messages

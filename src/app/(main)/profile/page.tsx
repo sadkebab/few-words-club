@@ -1,6 +1,6 @@
 import { currentUserData } from "@/modules/server/data/user";
-import { UserPosts } from "../../../components/posts/user-posts";
-import { PostContextProvider } from "@/components/posts/context";
+import { UserPosts } from "../../../components/post/user-posts";
+import { PostContextProvider } from "@/components/post/context";
 
 const PAGE_SIZE = 30;
 export default async function Page() {

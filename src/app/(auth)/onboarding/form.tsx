@@ -17,58 +17,62 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { saveUserDataAction } from "@/modules/server/actions/onboarding";
-import { useEffect } from "react";
-import { saveUserSchema } from "@/modules/server/validators/onboarding";
+import { useState } from "react";
+import { SaveUserSchema } from "@/modules/server/validators/onboarding";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { Combobox } from "@/components/combobox";
 import countries from "@/lib/utils/countries";
 import ReactCountryFlag from "react-country-flag";
+import { Loader2 } from "lucide-react";
 
 export function OnboardingForm() {
-  const { execute, result } = useAction(saveUserDataAction);
+  const [fetching, setFetching] = useState(false);
   const router = useRouter();
-  const { data, serverError, fetchError, validationErrors } = result;
 
-  useEffect(() => {
-    if (data?.created) {
+  const { execute } = useAction(saveUserDataAction, {
+    onExecute: () => {
+      setFetching(true);
+    },
+    onSuccess: () => {
       toast({
         title: "Account created.",
         description: "Wellcome to the Few Words Club!",
       });
       router.push("/feed");
-    }
-  }, [data, router]);
+    },
+    onError: ({ fetchError, serverError, validationErrors }) => {
+      if (serverError) {
+        toast({
+          title: "Server Error",
+          description: serverError,
+        });
+      }
+      if (fetchError) {
+        toast({
+          title: "Client Error",
+          description: fetchError,
+        });
+      }
+      if (validationErrors) {
+        toast({
+          title: "Validation Error",
+          description: Object.keys(validationErrors)
+            .map((k) => {
+              const s = validationErrors[k as keyof typeof validationErrors];
+              return s ? `Field "${k}": ${s.join(", ")}` : "";
+            })
+            .join("/n"),
+        });
+      }
+    },
+    onSettled: () => {
+      setFetching(false);
+    },
+  });
 
-  useEffect(() => {
-    if (serverError) {
-      toast({
-        title: "Server Error",
-        description: serverError,
-      });
-    }
-    if (fetchError) {
-      toast({
-        title: "Client Error",
-        description: fetchError,
-      });
-    }
-    if (validationErrors) {
-      toast({
-        title: "Validation Error",
-        description: Object.keys(validationErrors)
-          .map((k) => {
-            const s = validationErrors[k as keyof typeof validationErrors];
-            return s ? `Field "${k}": ${s.join(", ")}` : "";
-          })
-          .join("/n"),
-      });
-    }
-  }, [serverError, fetchError, validationErrors]);
-
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof saveUserSchema>>({
-    resolver: zodResolver(saveUserSchema),
+  const form = useForm<z.infer<typeof SaveUserSchema>>({
+    resolver: zodResolver(SaveUserSchema),
     defaultValues: {
       username: "",
       displayName: "",
@@ -78,8 +82,8 @@ export function OnboardingForm() {
     },
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof saveUserSchema>) {
+  function onSubmit(values: z.infer<typeof SaveUserSchema>) {
+    if (fetching) return;
     execute(values);
   }
 
@@ -163,7 +167,9 @@ export function OnboardingForm() {
           )}
         />
 
-        <Button type="submit">Save</Button>
+        <Button type="submit" className="flex items-center gap-2">
+          Save {fetching && <Loader2 className="size-4 animate-spin" />}
+        </Button>
       </form>
     </Form>
   );

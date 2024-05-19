@@ -1,5 +1,5 @@
-import { PostContextProvider } from "@/components/posts/context";
-import { PublicFeed } from "@/components/posts/feed";
+import { PostContextProvider } from "@/components/post/context";
+import { PublicFeed } from "@/components/post/feed";
 import { safe } from "@/lib/safe-actions";
 import { currentUserData } from "@/modules/server/data/user";
 

@@ -1,9 +1,77 @@
 "use server";
 import { userAction } from "@/lib/safe-actions";
-import { PostAction } from "../validators/posts";
+import {
+  CreatePostSchema,
+  EditPostSchema,
+  PostActionSchema,
+} from "../validators/posts";
 import { Likes, Posts, Saves } from "@/modules/db/schema";
 import { db } from "@/modules/db";
 import { and, eq } from "drizzle-orm";
+import { nanoid } from "nanoid";
+import { ActionError } from "@/lib/safe-actions/error";
+
+export const createPostAction = userAction(
+  CreatePostSchema,
+  async ({ content }, { userData }) => {
+    const id = nanoid();
+    const res = await db
+      .insert(Posts)
+      .values({
+        id,
+        content,
+        authorId: userData.id,
+      })
+      .returning();
+
+    if (res.length === 0) {
+      throw new ActionError("Failed to create post");
+    }
+
+    return {
+      created: res[0]!.id,
+    };
+  },
+);
+
+export const editPostAction = userAction(
+  EditPostSchema,
+  async ({ postId, content }, { userData }) => {
+    const res = await db
+      .update(Posts)
+      .set({
+        content,
+      })
+      .where(and(eq(Posts.id, postId), eq(Posts.authorId, userData.id)))
+      .returning();
+
+    if (res.length === 0) {
+      throw new ActionError("Failed to edit post");
+    }
+
+    return {
+      edited: res[0]!.id,
+    };
+  },
+);
+
+export const deletePostAction = userAction(
+  PostActionSchema,
+  async ({ postId }, { userData }) => {
+    const res = await db
+      .delete(Posts)
+      .where(and(eq(Posts.id, postId), eq(Posts.authorId, userData.id)))
+      .returning();
+
+    if (res.length === 0) {
+      throw new ActionError("Failed to delete post");
+    }
+
+    return {
+      deleted: res[0]!.id,
+    };
+  },
+);
 
 async function updateLikeCount(postId: string) {
   const likesForPost = await db
@@ -20,8 +88,9 @@ async function updateLikeCount(postId: string) {
     })
     .where(eq(Posts.id, postId));
 }
+
 export const likePostAction = userAction(
-  PostAction,
+  PostActionSchema,
   async ({ postId }, { userData }) => {
     const res = await db
       .insert(Likes)
@@ -32,7 +101,7 @@ export const likePostAction = userAction(
       .returning();
 
     if (res.length === 0) {
-      throw new Error("Failed to like post");
+      throw new ActionError("Failed to like post");
     }
 
     await updateLikeCount(postId);
@@ -44,7 +113,7 @@ export const likePostAction = userAction(
 );
 
 export const unlikePostAction = userAction(
-  PostAction,
+  PostActionSchema,
   async ({ postId }, { userData }) => {
     const res = await db
       .delete(Likes)
@@ -52,7 +121,7 @@ export const unlikePostAction = userAction(
       .returning();
 
     if (res.length === 0) {
-      throw new Error("Failed to unlike post");
+      throw new ActionError("Failed to unlike post");
     }
 
     await updateLikeCount(postId);
@@ -80,7 +149,7 @@ async function updateSaveCount(postId: string) {
 }
 
 export const savePostAction = userAction(
-  PostAction,
+  PostActionSchema,
   async ({ postId }, { userData }) => {
     const res = await db
       .insert(Saves)
@@ -91,7 +160,7 @@ export const savePostAction = userAction(
       .returning();
 
     if (res.length === 0) {
-      throw new Error("Failed to save post");
+      throw new ActionError("Failed to save post");
     }
 
     await updateSaveCount(postId);
@@ -103,7 +172,7 @@ export const savePostAction = userAction(
 );
 
 export const unsavePostAction = userAction(
-  PostAction,
+  PostActionSchema,
   async ({ postId }, { userData }) => {
     const res = await db
       .delete(Saves)
@@ -111,7 +180,7 @@ export const unsavePostAction = userAction(
       .returning();
 
     if (res.length === 0) {
-      throw new Error("Failed to unsave post");
+      throw new ActionError("Failed to unsave post");
     }
 
     await updateSaveCount(postId);

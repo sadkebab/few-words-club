@@ -1,5 +1,5 @@
 "use server";
-import { saveUserSchema } from "../validators/onboarding";
+import { SaveUserSchema } from "../validators/onboarding";
 import { authenticatedAction } from "@/lib/safe-actions";
 import { ActionError } from "@/lib/safe-actions/error";
 import { db } from "@/modules/db";
@@ -10,7 +10,7 @@ import { nanoid } from "nanoid";
 import { z } from "zod";
 
 export const saveUserDataAction = authenticatedAction(
-  saveUserSchema,
+  SaveUserSchema,
   async ({ username, displayName, country: location, bio }, { user }) => {
     const id = nanoid();
 
@@ -35,7 +35,7 @@ export const saveUserDataAction = authenticatedAction(
 );
 
 export const skipMediaOnboardingAction = authenticatedAction(
-  z.null(),
+  z.null().optional(),
   async (_, { user }) => {
     const result = await db
       .update(UserData)

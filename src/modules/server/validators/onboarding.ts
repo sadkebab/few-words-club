@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const saveUserSchema = z.object({
+export const SaveUserSchema = z.object({
   username: z
     .string()
     .min(4, {

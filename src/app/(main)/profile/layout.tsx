@@ -15,7 +15,7 @@ export default async function Layout({
       <div className="w-full bg-cover bg-center" style={{ backgroundImage }}>
         <div className="h-48"></div>
       </div>
-      <div className="flex w-full flex-1 flex-col bg-background">
+      <div className="flex w-full flex-1 flex-col bg-gradient-to-b from-background to-transparent">
         <div className="flex w-full flex-col items-center">
           <Avatar className="-mt-[4.5rem] size-36 border-4 border-background">
             <AvatarImage src={userData.picture ?? "/default_thumb.png"} />
@@ -51,8 +51,8 @@ export default async function Layout({
             </ProfileSectionButton>
           </div>
         </div>
-        <div className="mt-8">{children}</div>
       </div>
+      <div className="mt-8">{children}</div>
     </div>
   );
 }
