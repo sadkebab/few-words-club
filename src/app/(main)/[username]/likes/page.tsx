@@ -1,4 +1,4 @@
-import { usernameId } from "@/modules/server/data/user";
+import { usernameId } from "@/modules/server/data/users";
 import { LikeFeed } from "@/components/post/feeds/like";
 import { PostContextProvider } from "@/components/post/context";
 

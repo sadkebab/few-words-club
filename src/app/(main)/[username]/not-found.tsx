@@ -1,6 +1,6 @@
 import { Ghost } from "lucide-react";
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="flex w-full flex-1 items-center justify-center">
       <div className="flex flex-col items-center justify-between">

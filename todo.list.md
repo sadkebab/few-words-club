@@ -4,7 +4,6 @@
 - Notifications
 - Direct Messages
 - User Reccomendations
-- Saved Posts
 - Search
 
 TODO

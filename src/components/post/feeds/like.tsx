@@ -60,7 +60,7 @@ export function LikeFeed({
         </div>
       ) : (
         <>
-          <div className="w-full divide-y border-t">
+          <div className="w-full border-t">
             {data.pages.map((group, i) => (
               <Fragment key={i}>
                 {group.data.map((post) => (

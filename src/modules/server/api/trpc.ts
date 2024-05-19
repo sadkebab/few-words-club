@@ -3,7 +3,7 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/modules/db";
-import { currentUserData } from "../data/user";
+import { currentUserData } from "../data/users";
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   return {

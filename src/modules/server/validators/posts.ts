@@ -5,7 +5,7 @@ export const PostActionSchema = z.object({
 });
 
 export const CreatePostSchema = z.object({
-  content: z.string().min(4),
+  content: z.string().min(4).max(300),
 });
 
 export const EditPostSchema = z.object({

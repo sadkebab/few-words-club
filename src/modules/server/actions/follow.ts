@@ -1,7 +1,7 @@
 "use server";
 
 import { userAction } from "@/lib/safe-actions";
-import { FollowActionSchema } from "../validators/follow";
+import { FollowActionSchema } from "../validators/follows";
 import { db } from "@/modules/db";
 import { ActionError } from "@/lib/safe-actions/error";
 import { Follows } from "@/modules/db/schema";
@@ -13,8 +13,8 @@ export const followUserAction = userAction(
     const already = await db.query.Follows.findFirst({
       where: (follow, cmp) =>
         cmp.and(
-          cmp.eq(follow.followedId, userId),
-          cmp.eq(follow.followerId, userData.id),
+          cmp.eq(follow.target, userId),
+          cmp.eq(follow.origin, userData.id),
         ),
     });
 
@@ -27,8 +27,8 @@ export const followUserAction = userAction(
     const res = await db
       .insert(Follows)
       .values({
-        followerId: userData.id,
-        followedId: userId,
+        origin: userData.id,
+        target: userId,
       })
       .returning();
 
@@ -45,16 +45,9 @@ export const followUserAction = userAction(
 export const unfollowUserAction = userAction(
   FollowActionSchema,
   async ({ userId }, { userData }) => {
-    console.log("userData", userId);
-
     const res = await db
       .delete(Follows)
-      .where(
-        and(
-          eq(Follows.followerId, userData.id),
-          eq(Follows.followedId, userId),
-        ),
-      )
+      .where(and(eq(Follows.origin, userData.id), eq(Follows.target, userId)))
       .returning();
 
     if (res.length === 0) {

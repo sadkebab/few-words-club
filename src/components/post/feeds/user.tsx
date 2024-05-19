@@ -47,7 +47,7 @@ export function UserFeed({
           <p>No posts yet.</p>
         </div>
       ) : (
-        <div className="w-full space-y-4 divide-y border-t">
+        <div className="w-full border-t">
           {data.pages.map((group, i) => (
             <Fragment key={i}>
               {group.data.map((post) => (

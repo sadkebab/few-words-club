@@ -41,7 +41,7 @@ export function Post({ postData }: { postData: PostData }) {
   const canEdit = viewerId === post.author?.id;
 
   return (
-    <div className="">
+    <div className="border-b">
       <CardHeader className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-2">
           <Link href={`/${post.author?.username}`}>

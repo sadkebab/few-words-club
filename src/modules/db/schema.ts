@@ -100,10 +100,10 @@ export const Follows = pgTable(
   "follows",
   {
     id: serial("id").primaryKey(),
-    followerId: text("follower_id")
+    origin: text("origin")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
-    followedId: text("followed_id")
+    target: text("target")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
     created: timestamp("created")
@@ -111,8 +111,8 @@ export const Follows = pgTable(
       .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
-    followerIdIdx: index("follows_follower_id").on(table.followerId),
-    followedIdIdx: index("follows_followed_id").on(table.followedId),
+    followerIdIdx: index("follows_origin_id").on(table.origin),
+    followedIdIdx: index("follows_target_id").on(table.target),
   }),
 );
 

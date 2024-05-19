@@ -50,7 +50,7 @@ export function PublicFeed({ pageSize }: { pageSize: number }) {
           </div>
         </div>
       ) : (
-        <div className="w-full space-y-4 divide-y border-t last:border-b">
+        <div className="w-full">
           {data.pages.map((group, i) => (
             <Fragment key={i}>
               {group.data.map((post) => (

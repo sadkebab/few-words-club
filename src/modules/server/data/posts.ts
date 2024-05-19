@@ -2,9 +2,9 @@
 import { db } from "@/modules/db";
 import { Follows, Likes, Posts, Saves, UserData } from "../../db/schema";
 import { count, eq, desc, and, sql, inArray } from "drizzle-orm";
-import { currentUserData } from "./user";
+import { currentUserData } from "./users";
 import { safe } from "@/lib/safe-actions";
-import { QueryBuilder } from "drizzle-orm/pg-core";
+import { QueryBuilder, alias } from "drizzle-orm/pg-core";
 
 function postQuery(viewerId?: string) {
   return db
@@ -123,14 +123,15 @@ export async function followedFeedPaginated(
   const viewerId = (await safe(currentUserData))?.id;
   const qb = new QueryBuilder();
   const isSaved = inArray(
-    UserData.id,
+    Posts.authorId,
     qb
       .select({
-        id: Follows.followedId,
+        id: Follows.target,
       })
       .from(Follows)
-      .where(eq(Follows.followerId, userId)),
+      .where(eq(Follows.origin, userId)),
   );
+
   const posts = await postQuery(viewerId)
     .where(isSaved)
     .orderBy(desc(Posts.created))
@@ -186,6 +187,8 @@ export async function likeFeedPaginated(
   limit: number,
   offset: number,
 ): Promise<{ data: PostData[]; nextCursor: number | null }> {
+  const UserLikes = alias(Likes, "user_likes");
+
   const posts = await db
     .select({
       id: Posts.id,
@@ -199,32 +202,21 @@ export async function likeFeedPaginated(
         displayName: UserData.displayName,
         picture: UserData.picture,
       },
+      liked: sql<boolean>`(${UserLikes.id}) is not null`,
+      saved: sql<boolean>`(${Saves.id}) is not null`,
     })
     .from(Likes)
     .innerJoin(Posts, eq(Likes.postId, Posts.id))
     .leftJoin(UserData, eq(Posts.authorId, UserData.id))
+    .leftJoin(
+      UserLikes,
+      and(eq(UserLikes.postId, Posts.id), eq(UserLikes.userId, userId)),
+    )
+    .leftJoin(Saves, and(eq(Saves.postId, Posts.id), eq(Saves.userId, userId)))
     .where(eq(Likes.userId, userId))
     .orderBy(desc(Likes.created))
     .limit(limit)
     .offset(offset);
-
-  const postIds = posts.map((post) => post.id);
-
-  const userLikes = await db
-    .select({ postId: Likes.postId })
-    .from(Likes)
-    .where(inArray(Likes.postId, postIds));
-
-  const userSaves = await db
-    .select({ postId: Saves.postId })
-    .from(Saves)
-    .where(inArray(Saves.postId, postIds));
-
-  const updated = posts.map((post) => {
-    const liked = userLikes.some((like) => like.postId === post.id);
-    const saved = userSaves.some((save) => save.postId === post.id);
-    return { ...post, liked, saved };
-  });
 
   const countRes = await db
     .select({ count: count() })
@@ -234,7 +226,7 @@ export async function likeFeedPaginated(
 
   const next = offset + limit;
 
-  return { data: updated, nextCursor: next >= total ? null : next };
+  return { data: posts, nextCursor: next >= total ? null : next };
 }
 
 export type PostData = Awaited<

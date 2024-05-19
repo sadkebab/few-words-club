@@ -2,12 +2,15 @@ import { ProfileSectionButton } from "@/components/client-buttons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { safe } from "@/lib/safe-actions";
 import { db } from "@/modules/db";
-import { currentUserData, userDataWithStats } from "@/modules/server/data/user";
-import { notFound } from "next/navigation";
+import {
+  currentUserData,
+  userDataWithStats,
+} from "@/modules/server/data/users";
 import { Suspense } from "react";
 import { FollowButton } from "@/components/post/profile/follow-unfollow";
 import { DummyFollow } from "@/components/post/profile/dummy-follow";
 import Link from "next/link";
+import { Ghost } from "lucide-react";
 
 export default async function Layout({
   children,
@@ -16,15 +19,23 @@ export default async function Layout({
   children: React.ReactNode;
   params: { username: string };
 }) {
-  console.log("username", username);
-
   const [target, viewer] = await Promise.all([
     safe(async () => userDataWithStats(username)),
     safe(currentUserData),
   ]);
 
   if (target === undefined) {
-    return notFound();
+    //FIX ME not-found.tsx not working???
+    return (
+      <div className="flex w-full flex-1 items-center justify-center">
+        <div className="flex flex-col items-center justify-between">
+          <Ghost className="size-[2.5rem] animate-bounce stroke-muted-foreground" />
+          <p className="text-lg font-medium text-muted-foreground">
+            Page not found.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   const { userData, followers, follows } = target;
@@ -33,7 +44,7 @@ export default async function Layout({
 
   const backgroundImage = `url('${userData.banner ?? "/default_banner.png"}')`;
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex-1t flex w-full flex-col">
       <div className="w-full bg-cover bg-center" style={{ backgroundImage }}>
         <div className="h-48"></div>
       </div>
@@ -66,7 +77,7 @@ export default async function Layout({
             </div>
           </div>
         </div>
-        <div className="sticky mt-2 flex w-full justify-center">
+        <div className="mt-2 flex w-full justify-center">
           <div className="flex gap-1 rounded-md bg-muted p-px">
             <ProfileSectionButton href={`/${username}`}>
               Posts
@@ -83,7 +94,7 @@ export default async function Layout({
           </div>
         </div>
       </div>
-      <div className="mt-8">{children}</div>
+      <div className="mt-8 flex-1">{children}</div>
     </div>
   );
 }
@@ -104,10 +115,7 @@ async function FollowOrUnfollow({
 
   const follow = await db.query.Follows.findFirst({
     where: (follow, cmp) =>
-      cmp.and(
-        cmp.eq(follow.followedId, targetId),
-        cmp.eq(follow.followerId, userId),
-      ),
+      cmp.and(cmp.eq(follow.target, targetId), cmp.eq(follow.origin, userId)),
   });
 
   return <FollowButton target={targetId} value={follow != undefined} />;

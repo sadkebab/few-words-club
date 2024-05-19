@@ -1,7 +1,7 @@
 import { PostContextProvider } from "@/components/post/context";
 import { SavedFeed } from "@/components/post/feeds/saved";
 import { safe } from "@/lib/safe-actions";
-import { currentUserData } from "@/modules/server/data/user";
+import { currentUserData } from "@/modules/server/data/users";
 
 const PAGE_SIZE = 30;
 export default async function Page() {

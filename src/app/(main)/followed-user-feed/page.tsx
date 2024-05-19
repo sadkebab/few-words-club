@@ -1,6 +1,6 @@
 import { PostContextProvider } from "@/components/post/context";
 import { FollowedFeed } from "@/components/post/feeds/followed";
-import { currentUserData } from "@/modules/server/data/user";
+import { currentUserData } from "@/modules/server/data/users";
 
 const PAGE_SIZE = 30;
 export default async function Page() {

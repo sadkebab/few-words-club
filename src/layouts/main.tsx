@@ -4,7 +4,6 @@ import {
   Mail,
   Bookmark,
   Cog,
-  User,
   Search,
   Globe2,
   UsersRound,
@@ -18,7 +17,7 @@ import { ToolbarButton } from "@/components/client-buttons";
 import { Fonts } from "@/lib/fonts";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 
-import { currentUserData, unreadCounter } from "@/modules/server/data/user";
+import { currentUserData, unreadCounter } from "@/modules/server/data/users";
 import { safe } from "@/lib/safe-actions";
 import { Badge } from "@/components/ui/badge";
 import { CreatePostButton } from "@/components/post/create-post-button";
@@ -114,9 +113,6 @@ async function Toolbar() {
           <ToolbarButton href="/notifications">
             Notifications <Bell />
           </ToolbarButton>
-          <ToolbarButton href={`/${userData.username}`}>
-            Profile <User />
-          </ToolbarButton>
           <ToolbarButton href="/search">
             Search <Search />
           </ToolbarButton>
@@ -125,7 +121,7 @@ async function Toolbar() {
       </div>
 
       <div className="flex flex-col gap-4 border-t p-4">
-        {userDisplay}
+        <Link href={`/${userData.username}`}>{userDisplay}</Link>
         <div className="flex justify-between">
           <div className="flex gap-1">
             <Button variant={"outline"} size={"icon"} asChild>
