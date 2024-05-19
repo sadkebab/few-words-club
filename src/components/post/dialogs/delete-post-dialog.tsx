@@ -97,7 +97,11 @@ export function DeletePostDialog({
           >
             Cancel
           </Button>
-          <Button variant="destructive" onClick={submitDelete}>
+          <Button
+            variant="destructive"
+            onClick={submitDelete}
+            className="flex items-center gap-2"
+          >
             Delete {fetching && <Loader2 className="size-4 animate-spin" />}
           </Button>
         </DialogFooter>

@@ -92,6 +92,17 @@ async function updateLikeCount(postId: string) {
 export const likePostAction = userAction(
   PostActionSchema,
   async ({ postId }, { userData }) => {
+    const already = await db.query.Likes.findFirst({
+      where: (like, cmp) =>
+        cmp.and(cmp.eq(like.postId, postId), cmp.eq(like.userId, userData.id)),
+    });
+
+    if (already) {
+      return {
+        liked: already.id,
+      };
+    }
+
     const res = await db
       .insert(Likes)
       .values({
@@ -151,6 +162,16 @@ async function updateSaveCount(postId: string) {
 export const savePostAction = userAction(
   PostActionSchema,
   async ({ postId }, { userData }) => {
+    const already = await db.query.Saves.findFirst({
+      where: (save, cmp) =>
+        cmp.and(cmp.eq(save.postId, postId), cmp.eq(save.userId, userData.id)),
+    });
+
+    if (already) {
+      return {
+        saved: already.id,
+      };
+    }
     const res = await db
       .insert(Saves)
       .values({

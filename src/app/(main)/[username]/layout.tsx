@@ -1,8 +1,13 @@
 import { ProfileSectionButton } from "@/components/client-buttons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { safe } from "@/lib/safe-actions";
+import { db } from "@/modules/db";
 import { currentUserData, userDataWithStats } from "@/modules/server/data/user";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { FollowButton } from "@/components/post/profile/follow-unfollow";
+import { DummyFollow } from "@/components/post/profile/dummy-follow";
+import Link from "next/link";
 
 export default async function Layout({
   children,
@@ -25,7 +30,6 @@ export default async function Layout({
   const { userData, followers, follows } = target;
 
   const isProfile = target.userData.id === viewer?.id;
-  console.log("isProfile", isProfile);
 
   const backgroundImage = `url('${userData.banner ?? "/default_banner.png"}')`;
   return (
@@ -44,8 +48,15 @@ export default async function Layout({
               <h1 className="text-lg font-medium">{userData.displayName}</h1>
               <h2 className="font-light">{`(@${userData.username})`}</h2>
             </div>
-
-            <div className="flex flex-col items-center">
+            {!isProfile && (
+              <Suspense fallback={<DummyFollow />}>
+                <FollowOrUnfollow
+                  targetId={target.userData.id}
+                  userId={viewer?.id}
+                />
+              </Suspense>
+            )}
+            <div className="mt-4 flex flex-col items-center">
               <p className="text-xs font-medium">Location</p>
               <h3 className="text-sm">{userData.location ?? "Unknown"}</h3>
             </div>
@@ -75,4 +86,29 @@ export default async function Layout({
       <div className="mt-8">{children}</div>
     </div>
   );
+}
+
+async function FollowOrUnfollow({
+  targetId,
+  userId,
+}: {
+  targetId: string;
+  userId?: string;
+}) {
+  if (!userId)
+    return (
+      <Link href={"sign-in"}>
+        <DummyFollow />
+      </Link>
+    );
+
+  const follow = await db.query.Follows.findFirst({
+    where: (follow, cmp) =>
+      cmp.and(
+        cmp.eq(follow.followedId, targetId),
+        cmp.eq(follow.followerId, userId),
+      ),
+  });
+
+  return <FollowButton target={targetId} value={follow != undefined} />;
 }
