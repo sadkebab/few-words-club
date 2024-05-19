@@ -1,6 +1,6 @@
 - Cloudflare R2 profile pictures
 - Profile Picture Upload
-- Profile
+- Profile Edit
 - Notifications
 - Direct Messages
 - User Reccomendations

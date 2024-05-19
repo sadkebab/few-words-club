@@ -7,10 +7,11 @@ import {
   userDataWithStats,
 } from "@/modules/server/data/users";
 import { Suspense } from "react";
-import { FollowButton } from "@/components/post/profile/follow-unfollow";
-import { DummyFollow } from "@/components/post/profile/dummy-follow";
+import { FollowButton } from "@/components/profile/follow-unfollow";
+import { DummyFollow } from "@/components/profile/dummy-follow";
 import Link from "next/link";
 import { Ghost } from "lucide-react";
+import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 
 export default async function Layout({
   children,
@@ -24,6 +25,7 @@ export default async function Layout({
     safe(currentUserData),
   ]);
 
+  console.log("target", target);
   if (target === undefined) {
     //FIX ME not-found.tsx not working???
     return (
@@ -51,7 +53,7 @@ export default async function Layout({
       <div className="flex w-full flex-1 flex-col bg-gradient-to-b from-background to-transparent">
         <div className="flex w-full flex-col items-center">
           <Avatar className="-mt-[4.5rem] size-36 border-4 border-background">
-            <AvatarImage src={userData.picture ?? "/default_thumb.png"} />
+            <AvatarImage src={userData.picture ?? DEFAULT_THUMBNAIL} />
             <AvatarFallback>{userData.displayName?.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="mt-2 flex flex-col items-center gap-2 pb-4">

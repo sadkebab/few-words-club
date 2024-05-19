@@ -22,6 +22,7 @@ import { humanDateDiff } from "@/lib/react/date";
 import { CounterLabel } from "../counter";
 import Link from "next/link";
 import { PostOptionsButton } from "./post-options-button";
+import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 
 export function Post({ postData }: { postData: PostData }) {
   const { data: post, refetch } = api.posts.single.useQuery(
@@ -49,7 +50,7 @@ export function Post({ postData }: { postData: PostData }) {
               <AvatarFallback>
                 {post.author?.displayName?.slice(0, 2) ?? "N/A"}
               </AvatarFallback>
-              <AvatarImage src={post.author?.picture ?? "/default_thumb.png"} />
+              <AvatarImage src={post.author?.picture ?? DEFAULT_THUMBNAIL} />
             </Avatar>
           </Link>
           <div className="flex flex-col leading-none">
@@ -62,7 +63,7 @@ export function Post({ postData }: { postData: PostData }) {
                 <span>@{post.author?.username}</span>
               </Link>
               {" · "}
-              <Link href={`/${post.author?.username}/post/${post.id}`}>
+              <Link href={`/${post.author?.username}/${post.id}`}>
                 <span>{humanDateDiff(post.created, cursorDate)}</span>
               </Link>
             </p>
@@ -70,7 +71,7 @@ export function Post({ postData }: { postData: PostData }) {
         </div>
         {canEdit && <PostOptionsButton post={post} />}
       </CardHeader>
-      <Link href={`/${post.author?.username}/post/${post.id}`}>
+      <Link href={`/${post.author?.username}/${post.id}`}>
         <CardContent>{post.content}</CardContent>
       </Link>
       <CardFooter className="flex gap-1">

@@ -5,8 +5,8 @@ import { Fragment, useEffect } from "react";
 import { Ghost } from "lucide-react";
 import { api } from "@/modules/trpc/react";
 import { toast } from "@/components/ui/use-toast";
-import { QueryTrigger } from "../../trigger";
-import { IssuePlaceholder } from "../../issue-placeholder";
+import { QueryTrigger } from "../../post/trigger";
+import { IssuePlaceholder } from "../../post/issue-placeholder";
 import { Follower, FollowerSkeleton } from "../follower";
 
 const SKELETON_COUNT = 1;

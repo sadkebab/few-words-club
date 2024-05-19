@@ -1,19 +1,26 @@
 "use client";
 
 import { Fragment, useEffect } from "react";
-import { Post, PostSkeleton } from "../post";
+import { Post, PostSkeleton } from "../post/post";
 import { Ghost } from "lucide-react";
 import { api } from "@/modules/trpc/react";
 import { toast } from "@/components/ui/use-toast";
-import { QueryTrigger } from "../trigger";
-import { IssuePlaceholder } from "../issue-placeholder";
+import { QueryTrigger } from "../post/trigger";
+import { IssuePlaceholder } from "../post/issue-placeholder";
 
 const SKELETON_COUNT = 4;
 
-export function PublicFeed({ pageSize }: { pageSize: number }) {
+export function FollowedFeed({
+  pageSize,
+  userId,
+}: {
+  pageSize: number;
+  userId: string;
+}) {
   const { data, error, fetchNextPage, hasNextPage, status } =
-    api.posts.publicFeed.useInfiniteQuery(
+    api.posts.followedFeed.useInfiniteQuery(
       {
+        userId,
         pageSize,
       },
       {
@@ -31,10 +38,12 @@ export function PublicFeed({ pageSize }: { pageSize: number }) {
   }, [status, error]);
 
   return status === "loading" ? (
-    <div className="w-full space-y-4 divide-y border-t">
-      {[...Array.from({ length: SKELETON_COUNT })].map((_, i) => (
-        <PostSkeleton key={i} />
-      ))}
+    <div className="flex w-full">
+      <div className="w-full space-y-4 divide-y border-t">
+        {[...Array.from({ length: SKELETON_COUNT })].map((_, i) => (
+          <PostSkeleton key={i} />
+        ))}
+      </div>
     </div>
   ) : status === "error" ? (
     <IssuePlaceholder />

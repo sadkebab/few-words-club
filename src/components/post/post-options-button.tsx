@@ -11,8 +11,8 @@ import {
 import { Ellipsis, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { type PostData } from "@/modules/server/data/posts";
-import { EditPostDialog } from "./dialogs/edit-post-dialog";
-import { DeletePostDialog } from "./dialogs/delete-post-dialog";
+import { EditPostDialog } from "../dialogs/edit-post-dialog";
+import { DeletePostDialog } from "../dialogs/delete-post-dialog";
 
 export function PostOptionsButton({ post }: { post: PostData }) {
   const [editOpen, setEditOpen] = useState(false);

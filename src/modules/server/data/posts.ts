@@ -222,8 +222,8 @@ export async function likeFeedPaginated(
     .select({ count: count() })
     .from(Likes)
     .where(eq(Likes.userId, userId));
-  const total = countRes[0]?.count ?? 0;
 
+  const total = countRes[0]?.count ?? 0;
   const next = offset + limit;
 
   return { data: posts, nextCursor: next >= total ? null : next };
@@ -232,3 +232,12 @@ export async function likeFeedPaginated(
 export type PostData = Awaited<
   ReturnType<typeof userPostsPaginated>
 >["data"][number];
+
+export async function userPost(userId: string, postId: string) {
+  const viewerId = (await safe(currentUserData))?.id;
+  const result = await postQuery(viewerId).where(
+    and(eq(Posts.id, postId), eq(Posts.authorId, userId)),
+  );
+
+  return result[0] ?? undefined;
+}

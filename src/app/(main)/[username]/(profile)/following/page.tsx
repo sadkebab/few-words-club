@@ -1,8 +1,8 @@
 import { usernameId } from "@/modules/server/data/users";
 import { PostContextProvider } from "@/components/post/context";
-import { FollowerList } from "@/components/post/profile/lists/followers";
+import { FollowingList } from "@/components/profile/lists/following";
+import { QUERY_PAGE_SIZE } from "@/lib/constats";
 
-const PAGE_SIZE = 30;
 export default async function Page({
   params: { username },
 }: {
@@ -13,7 +13,7 @@ export default async function Page({
 
   return (
     <PostContextProvider viewerId={id} cursorDate={cursorDate}>
-      <FollowerList userId={id} pageSize={PAGE_SIZE} />
+      <FollowingList userId={id} pageSize={QUERY_PAGE_SIZE} />
     </PostContextProvider>
   );
 }
