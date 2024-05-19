@@ -3,7 +3,6 @@ import {
   Bell,
   Mail,
   Bookmark,
-  Cog,
   Search,
   Globe2,
   UsersRound,
@@ -127,7 +126,7 @@ async function Toolbar() {
           <div className="flex gap-1">
             <Button variant={"outline"} size={"icon"} asChild>
               <Link href="/about">
-                <Cog />
+                <Origami />
               </Link>
             </Button>
 

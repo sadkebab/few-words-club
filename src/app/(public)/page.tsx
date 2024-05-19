@@ -29,7 +29,15 @@ export default function Home() {
             </p>
           </CardContent>
           <CardFooter className="justify-between gap-1">
-            <ThemeToggle />
+            <div className="flex gap-1">
+              <Button variant={"outline"} size={"icon"} asChild>
+                <Link href="/about">
+                  <Origami />
+                </Link>
+              </Button>
+              <ThemeToggle />
+            </div>
+
             <div className="flex gap-1">
               <Button variant={"outline"} asChild>
                 <Link href="/sign-up">Sign Up</Link>
