@@ -1,13 +1,31 @@
 import { ProfileSectionButton } from "@/components/client-buttons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { userDataWithStats } from "@/modules/server/data/user";
+import { safe } from "@/lib/safe-actions";
+import { currentUserData, userDataWithStats } from "@/modules/server/data/user";
+import { notFound } from "next/navigation";
 
 export default async function Layout({
   children,
+  params: { username },
 }: {
   children: React.ReactNode;
+  params: { username: string };
 }) {
-  const { userData, followers, follows } = await userDataWithStats();
+  console.log("username", username);
+
+  const [target, viewer] = await Promise.all([
+    safe(async () => userDataWithStats(username)),
+    safe(currentUserData),
+  ]);
+
+  if (target === undefined) {
+    return notFound();
+  }
+
+  const { userData, followers, follows } = target;
+
+  const isProfile = target.userData.id === viewer?.id;
+  console.log("isProfile", isProfile);
 
   const backgroundImage = `url('${userData.banner ?? "/default_banner.png"}')`;
   return (
@@ -39,14 +57,16 @@ export default async function Layout({
         </div>
         <div className="sticky mt-2 flex w-full justify-center">
           <div className="flex gap-1 rounded-md bg-muted p-px">
-            <ProfileSectionButton href="/profile">Posts</ProfileSectionButton>
-            <ProfileSectionButton href="/profile/likes">
+            <ProfileSectionButton href={`/${username}`}>
+              Posts
+            </ProfileSectionButton>
+            <ProfileSectionButton href={`/${username}/likes`}>
               Likes
             </ProfileSectionButton>
-            <ProfileSectionButton href="/profile/followers">
+            <ProfileSectionButton href={`/${username}/followers`}>
               {followers} Followers
             </ProfileSectionButton>
-            <ProfileSectionButton href="/profile/following">
+            <ProfileSectionButton href={`/${username}/following`}>
               {follows} Following
             </ProfileSectionButton>
           </div>

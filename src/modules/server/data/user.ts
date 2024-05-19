@@ -5,25 +5,31 @@ import { db } from "../../db";
 import { eq, count, and } from "drizzle-orm";
 import { DirectMessages, Follows, Notifications } from "../../db/schema";
 
-export async function userDataWithStats(userId?: string) {
-  const actualUserId = userId ?? (await currentUserId());
+export async function userDataWithStats(username?: string) {
+  const userId = await usernameId(username);
 
   const userData = await db.query.UserData.findFirst({
-    where: (data, cmp) => cmp.eq(data.clerkId, actualUserId),
+    where: (data, cmp) => cmp.eq(data.id, userId),
   });
 
   if (!userData) {
     throw new Error("User data not found");
   }
 
-  const follows = await userFollows(actualUserId);
-  const followers = await userFollowers(actualUserId);
+  const follows = await userFollows(userId);
+  const followers = await userFollowers(userId);
 
   return { userData, follows, followers };
 }
 
-async function currentUserId() {
-  const user = await currentUser();
+export async function usernameId(username?: string) {
+  if (!username) {
+    return (await currentUserData()).id;
+  }
+  const user = await db.query.UserData.findFirst({
+    where: (user, cmp) => cmp.eq(user.username, username),
+  });
+
   if (!user) {
     throw new Error("User not found");
   }

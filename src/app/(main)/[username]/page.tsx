@@ -1,10 +1,14 @@
-import { currentUserData } from "@/modules/server/data/user";
+import { usernameId } from "@/modules/server/data/user";
 import { UserFeed } from "@/components/post/feeds/user";
 import { PostContextProvider } from "@/components/post/context";
 
 const PAGE_SIZE = 30;
-export default async function Page() {
-  const id = (await currentUserData()).id;
+export default async function Page({
+  params: { username },
+}: {
+  params: { username: string };
+}) {
+  const id = await usernameId(username);
   const cursorDate = new Date();
 
   return (

@@ -44,23 +44,35 @@ export function Post({ postData }: { postData: PostData }) {
     <div className="">
       <CardHeader className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-2">
-          <Avatar className="size-12">
-            <AvatarFallback>
-              {post.author?.displayName?.slice(0, 2) ?? "N/A"}
-            </AvatarFallback>
-            <AvatarImage src={post.author?.picture ?? "/default_thumb.png"} />
-          </Avatar>
+          <Link href={`/${post.author?.username}`}>
+            <Avatar className="size-12">
+              <AvatarFallback>
+                {post.author?.displayName?.slice(0, 2) ?? "N/A"}
+              </AvatarFallback>
+              <AvatarImage src={post.author?.picture ?? "/default_thumb.png"} />
+            </Avatar>
+          </Link>
           <div className="flex flex-col leading-none">
-            <h3 className="font-medium">{post.author?.displayName}</h3>
+            <Link href={`/${post.author?.username}`}>
+              <h3 className="font-medium">{post.author?.displayName}</h3>
+            </Link>
+
             <p className="text-sm font-light">
-              @{post.author?.username} ·{" "}
-              {humanDateDiff(post.created, cursorDate)}
+              <Link href={`/${post.author?.username}`}>
+                <span>@{post.author?.username}</span>
+              </Link>
+              {" · "}
+              <Link href={`/${post.author?.username}/post/${post.id}`}>
+                <span>{humanDateDiff(post.created, cursorDate)}</span>
+              </Link>
             </p>
           </div>
         </div>
         {canEdit && <PostOptionsButton post={post} />}
       </CardHeader>
-      <CardContent>{post.content}</CardContent>
+      <Link href={`/${post.author?.username}/post/${post.id}`}>
+        <CardContent>{post.content}</CardContent>
+      </Link>
       <CardFooter className="flex gap-1">
         {viewerId ? (
           <>

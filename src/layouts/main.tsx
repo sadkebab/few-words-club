@@ -114,7 +114,7 @@ async function Toolbar() {
           <ToolbarButton href="/notifications">
             Notifications <Bell />
           </ToolbarButton>
-          <ToolbarButton href="/profile">
+          <ToolbarButton href={`/${userData.username}`}>
             Profile <User />
           </ToolbarButton>
           <ToolbarButton href="/search">
