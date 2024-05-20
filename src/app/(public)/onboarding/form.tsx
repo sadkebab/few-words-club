@@ -77,7 +77,6 @@ export function OnboardingForm() {
       username: "",
       displayName: "",
       bio: undefined,
-      picture: undefined,
       country: undefined,
     },
   });
