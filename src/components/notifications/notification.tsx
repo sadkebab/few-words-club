@@ -18,7 +18,6 @@ export function NotificationCard({
 }: {
   notificationData: NotificationData;
 }) {
-  const [optimisticSeen, setOptimisticSeen] = useState(notificationData.seen);
   const [fetching, setFetching] = useState(false);
   const { decrease } = notificationCounterStore((state) => state);
   const { data: notification, refetch } = api.notifications.single.useQuery(
@@ -32,6 +31,7 @@ export function NotificationCard({
       refetchOnReconnect: false,
     },
   );
+  const [optimisticSeen, setOptimisticSeen] = useState(notification.seen);
 
   const { execute: clear } = useAction(clearNotificationAction, {
     onExecute: () => {
