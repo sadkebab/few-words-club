@@ -8,6 +8,7 @@ import { QueryTrigger } from "../post/trigger";
 import { NotificationCard, NotificationCardSkeleton } from "./notification";
 import { GhostPlaceholder } from "../ghost-placeholder";
 import { Button } from "../ui/button";
+import { Skeleton } from "../ui/skeleton";
 
 const SKELETON_SIZE = 10;
 
@@ -34,7 +35,9 @@ export function NotificationList({ pageSize }: { pageSize: number }) {
   return status === "loading" ? (
     <div className="w-full">
       <div className="border-b p-2">
-        <Button variant={"outline"}>Mark all as seen</Button>
+        <Button variant={"outline"}>
+          <Skeleton className="h-4 w-[110px] rounded-sm" />
+        </Button>
       </div>
       <div className="w-full border-t">
         {[...Array.from({ length: SKELETON_SIZE })].map((_, i) => (

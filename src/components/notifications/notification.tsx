@@ -1,3 +1,5 @@
+"use client";
+
 import { type NotificationData } from "@/modules/server/data/notifications";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
@@ -9,6 +11,7 @@ import { api } from "@/modules/trpc/react";
 import { useAction } from "next-safe-action/hooks";
 import { clearNotificationAction } from "@/modules/server/actions/notification";
 import { useState } from "react";
+import { notificationCounterStore } from "@/modules/stores/counters";
 
 export function NotificationCard({
   notificationData,
@@ -34,8 +37,8 @@ export function NotificationCard({
       setFetching(true);
       setOptimisticSeen(true);
     },
-    onSuccess: () => {
-      void refetch();
+    onSuccess: async () => {
+      await refetch();
     },
     onError: () => {
       setFetching(false);
@@ -47,7 +50,7 @@ export function NotificationCard({
 
   const handleClear = async () => {
     if (fetching || notification.seen) return;
-
+    notificationCounterStore((state) => state.decrease());
     clear({ notificationId: notification.id });
   };
 

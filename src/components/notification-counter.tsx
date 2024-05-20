@@ -2,6 +2,8 @@
 import useRealTimeEvent from "@/modules/pusher/client";
 import { api } from "@/modules/trpc/react";
 import { Badge } from "./ui/badge";
+import { notificationCounterStore } from "@/modules/stores/counters";
+import { useEffect } from "react";
 
 export function NotificationCounter({
   count,
@@ -12,19 +14,32 @@ export function NotificationCounter({
   userId: string;
   children: React.ReactNode;
 }) {
+  const { count: optimisticCount, refresh } = notificationCounterStore(
+    (state) => state,
+  );
+
+  useEffect(() => {
+    refresh(count);
+  }, [count, refresh]);
+
   const { data, refetch } = api.notifications.unclearedCount.useQuery(
     undefined,
     {
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
-      initialData: {
-        count,
+      initialData: () => {
+        return { count };
       },
     },
   );
 
   const utils = api.useUtils();
+
+  // const optimisticCount = useMemo(
+  //   () => notificationCounterStore((state) => state.refresh(data.count)),
+  //   [data.count],
+  // );
 
   useRealTimeEvent({
     channel: "notification",
@@ -42,7 +57,7 @@ export function NotificationCounter({
   return (
     <div className="flex gap-2">
       {children}
-      <Badge>{data.count}</Badge>
+      <Badge>{optimisticCount}</Badge>
     </div>
   );
 }
