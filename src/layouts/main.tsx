@@ -75,7 +75,6 @@ async function Toolbar() {
   }
 
   const unread = await unreadCounter(userData.id);
-  console.log(unread);
 
   const userDisplay = (
     <div className="flex items-center gap-4">
@@ -158,7 +157,6 @@ function Counter({
   count: number;
   children: React.ReactNode;
 }) {
-  console.log("counter", count);
   if (count === 0) {
     return <>{children}</>;
   }

@@ -14,7 +14,7 @@ export const saveUserDataAction = authenticatedAction(
   SaveUserSchema,
   async ({ username, displayName, country: location, bio }, { user }) => {
     const id = nanoid();
-    console.log("location", location);
+
     const result = await db
       .insert(UserData)
       .values({
