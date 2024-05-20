@@ -11,12 +11,11 @@ import { Button } from "../ui/button";
 import { Skeleton } from "../ui/skeleton";
 import { clearAllNotificationsAction } from "@/modules/server/notifications/actions";
 import { useAction } from "next-safe-action/hooks";
-import { useRouter } from "next/navigation";
 
 const SKELETON_SIZE = 10;
 
 export function NotificationList({ pageSize }: { pageSize: number }) {
-  const { data, error, fetchNextPage, hasNextPage, status, refetch } =
+  const { data, error, fetchNextPage, hasNextPage, status } =
     api.notifications.userNotificationsPaginated.useInfiniteQuery(
       {
         pageSize,
@@ -57,7 +56,7 @@ export function NotificationList({ pageSize }: { pageSize: number }) {
       ) : (
         <div className="w-full">
           <div className="border-b p-2">
-            <MarkButton refetch={refetch} />
+            <MarkButton />
           </div>
           {data.pages.map((group, i) => (
             <Fragment key={i}>
