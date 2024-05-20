@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge";
 import { CreatePostButton } from "@/components/post/create-post-button";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { NotificationCounter } from "@/components/notification-counter";
+import { mediaUrl } from "@/lib/utils/urls";
 
 export async function MainLayout({
   children,
@@ -82,7 +83,7 @@ async function Toolbar() {
   const userDisplay = (
     <div className="flex items-center gap-4">
       <Avatar className="size-12">
-        <AvatarImage src={userData.picture ?? DEFAULT_THUMBNAIL} />
+        <AvatarImage src={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)} />
         <AvatarFallback>{userData.displayName?.slice(0, 2)}</AvatarFallback>
       </Avatar>
       <div className="flex-1">

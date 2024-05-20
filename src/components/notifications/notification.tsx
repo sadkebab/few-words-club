@@ -12,6 +12,7 @@ import { useAction } from "next-safe-action/hooks";
 import { clearNotificationAction } from "@/modules/server/notifications/actions";
 import { useState } from "react";
 import { notificationCounterStore } from "@/modules/client-state/counters";
+import { mediaUrl } from "@/lib/utils/urls";
 
 export function NotificationCard({
   notificationData,
@@ -70,7 +71,7 @@ export function NotificationCard({
               {notification.origin.displayName?.slice(0, 2)}
             </AvatarFallback>
             <AvatarImage
-              src={notification.origin.picture ?? DEFAULT_THUMBNAIL}
+              src={mediaUrl(notification.origin.picture ?? DEFAULT_THUMBNAIL)}
             />
           </Avatar>
         </Link>

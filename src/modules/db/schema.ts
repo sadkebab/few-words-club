@@ -19,7 +19,7 @@ export const UserData = pgTable(
     clerkId: text("clerk_id").notNull(),
     username: text("username").notNull().unique(),
     picture: text("picture"),
-    banner: text("banner"),
+    cover: text("cover"),
     displayName: text("display_name"),
     bio: text("bio"),
     location: text("location"),

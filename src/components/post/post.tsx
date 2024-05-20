@@ -26,6 +26,7 @@ import {
   savePostAction,
   unsavePostAction,
 } from "@/modules/server/saves/actions";
+import { mediaUrl } from "@/lib/utils/urls";
 
 export function Post({ postData }: { postData: PostData }) {
   const { data: post, refetch } = api.posts.single.useQuery(
@@ -56,7 +57,9 @@ export function Post({ postData }: { postData: PostData }) {
               <AvatarFallback>
                 {post.author?.displayName?.slice(0, 2) ?? "N/A"}
               </AvatarFallback>
-              <AvatarImage src={post.author?.picture ?? DEFAULT_THUMBNAIL} />
+              <AvatarImage
+                src={mediaUrl(post.author?.picture ?? DEFAULT_THUMBNAIL)}
+              />
             </Avatar>
           </Link>
           <div className="flex flex-col leading-none">

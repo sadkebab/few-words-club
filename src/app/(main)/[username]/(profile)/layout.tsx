@@ -10,11 +10,12 @@ import { Suspense } from "react";
 import { FollowButton } from "@/components/profile/follow-unfollow";
 import { DummyFollow } from "@/components/profile/dummy-follow";
 import Link from "next/link";
-import { DEFAULT_BANNER, DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { DEFAULT_COVER, DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { GhostPlaceholder } from "@/components/ghost-placeholder";
 import countries from "@/lib/utils/countries";
 import { Globe2 } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
+import { mediaUrl } from "@/lib/utils/urls";
 
 export default async function Layout({
   children,
@@ -37,7 +38,7 @@ export default async function Layout({
 
   const isProfile = target.userData.id === viewer?.id;
 
-  const backgroundImage = `url('${userData.banner ?? DEFAULT_BANNER}')`;
+  const backgroundImage = `url('${mediaUrl(userData.cover ?? DEFAULT_COVER)}')`;
   return (
     <div className="flex-1t flex w-full flex-col">
       <div className="w-full bg-cover bg-center" style={{ backgroundImage }}>
@@ -46,7 +47,9 @@ export default async function Layout({
       <div className="flex w-full flex-1 flex-col bg-gradient-to-b from-background to-transparent">
         <div className="flex w-full flex-col items-center">
           <Avatar className="-mt-[4.5rem] size-36 border-4 border-background">
-            <AvatarImage src={userData.picture ?? DEFAULT_THUMBNAIL} />
+            <AvatarImage
+              src={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)}
+            />
             <AvatarFallback>{userData.displayName?.slice(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="mt-2 flex flex-col items-center gap-2 pb-4">

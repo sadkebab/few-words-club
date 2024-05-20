@@ -6,6 +6,7 @@ import { type FollowerData } from "@/modules/server/follows/data";
 import { FollowButton } from "./follow-unfollow";
 import Link from "next/link";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { mediaUrl } from "@/lib/utils/urls";
 
 export function Follower({ followerData }: { followerData: FollowerData }) {
   return (
@@ -14,7 +15,9 @@ export function Follower({ followerData }: { followerData: FollowerData }) {
         <Link href={`/${followerData.username}`}>
           <div className="flex items-center gap-4">
             <Avatar className="size-12">
-              <AvatarImage src={followerData.picture ?? DEFAULT_THUMBNAIL} />
+              <AvatarImage
+                src={mediaUrl(followerData.picture ?? DEFAULT_THUMBNAIL)}
+              />
               <AvatarFallback>
                 {followerData.displayName?.slice(0, 2)}
               </AvatarFallback>

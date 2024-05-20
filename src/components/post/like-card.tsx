@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { Heart } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { mediaUrl } from "@/lib/utils/urls";
 
 export function LikeCard({ likeData }: { likeData: LikeData }) {
   return (
@@ -12,7 +13,9 @@ export function LikeCard({ likeData }: { likeData: LikeData }) {
           <AvatarFallback>
             {likeData.user.displayName?.slice(0, 2)}
           </AvatarFallback>
-          <AvatarImage src={likeData.user.picture ?? DEFAULT_THUMBNAIL} />
+          <AvatarImage
+            src={mediaUrl(likeData.user.picture ?? DEFAULT_THUMBNAIL)}
+          />
         </Avatar>
         <div className="flex items-center gap-2">
           <span className="font-medium">{likeData.user.displayName}</span>

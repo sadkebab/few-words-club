@@ -26,5 +26,9 @@ export const SaveUserSchema = z.object({
       message: "The bio must be below 200 characters.",
     })
     .optional(),
-  picture: z.string().url().optional(),
+});
+
+export const SaveUserMediaSchema = z.object({
+  cover: z.string().optional(),
+  picture: z.string(),
 });

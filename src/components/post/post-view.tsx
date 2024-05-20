@@ -61,7 +61,7 @@ function PostLikes({
 
   return status === "loading" ? (
     <div className="flex w-full">
-      <div className="w-full space-y-4 divide-y border-t">
+      <div className="w-full divide-y border-t">
         {[...Array.from({ length: postLikes < 10 ? postLikes : 10 })].map(
           (_, i) => (
             <LikeCardSkeleton key={i} />

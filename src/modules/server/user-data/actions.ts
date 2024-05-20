@@ -1,8 +1,8 @@
 "use server";
 
-import { DEFAULT_BANNER, DEFAULT_THUMBNAIL } from "@/lib/constats";
-import { SaveUserSchema } from "./validators";
-import { authenticatedAction } from "@/lib/safe-actions";
+import { DEFAULT_COVER, DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { SaveUserMediaSchema, SaveUserSchema } from "./validators";
+import { authenticatedAction, userAction } from "@/lib/safe-actions";
 import { ActionError } from "@/lib/safe-actions/error";
 import { db } from "@/modules/db";
 
@@ -39,9 +39,13 @@ export const saveUserDataAction = authenticatedAction(
 export const skipMediaOnboardingAction = authenticatedAction(
   z.null().optional(),
   async (_, { user }) => {
+    console.log("skipMediaOnboardingAction", user.id);
     const result = await db
       .update(UserData)
-      .set({ picture: DEFAULT_THUMBNAIL, banner: DEFAULT_BANNER })
+      .set({
+        picture: DEFAULT_THUMBNAIL,
+        cover: DEFAULT_COVER,
+      })
       .where(eq(UserData.clerkId, user.id))
       .returning();
 
@@ -53,4 +57,22 @@ export const skipMediaOnboardingAction = authenticatedAction(
   },
 );
 
-//TODO image upload
+export const saveUserMediaAction = userAction(
+  SaveUserMediaSchema,
+  async ({ cover, picture }, { userData }) => {
+    const result = await db
+      .update(UserData)
+      .set({
+        cover: cover ?? DEFAULT_COVER,
+        picture,
+      })
+      .where(eq(UserData.id, userData.id))
+      .returning();
+
+    if (result.length === 0) {
+      throw new ActionError("Failed to save user media");
+    }
+
+    return { updated: result[0]!.id };
+  },
+);
