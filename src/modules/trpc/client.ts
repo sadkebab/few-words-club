@@ -6,13 +6,15 @@ import {
 
 import { getUrl, transformer } from "./shared";
 import { type AppRouter } from "@/modules/server/api/root";
+import { env } from "@/env";
 
 export const api = createTRPCProxyClient<AppRouter>({
   transformer,
   links: [
     loggerLink({
       enabled: (op) =>
-        process.env.NODE_ENV === "development" ||
+        (!env.NEXT_PUBLIC_MUTE_TRPC &&
+          process.env.NODE_ENV === "development") ||
         (op.direction === "down" && op.result instanceof Error),
     }),
     unstable_httpBatchStreamLink({

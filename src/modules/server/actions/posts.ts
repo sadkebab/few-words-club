@@ -72,7 +72,7 @@ export const deletePostAction = userAction(
       throw new ActionError("Failed to delete post");
     }
 
-    void postNotificationCleanup(postId);
+    await postNotificationCleanup(postId);
 
     return {
       deleted: res[0]!.id,
@@ -123,7 +123,7 @@ export const likePostAction = userAction(
     }
 
     await updateLikeCount(postId);
-    void sendLikeNotification({ postId, userId: userData.id });
+    await sendLikeNotification({ postId, userId: userData.id });
 
     return {
       like: res[0]!.id,
@@ -144,7 +144,7 @@ export const unlikePostAction = userAction(
     }
 
     await updateLikeCount(postId);
-    void removeLikeNotification({ postId, userId: userData.id });
+    await removeLikeNotification({ postId, userId: userData.id });
 
     return {
       unlike: res[0]!.id,

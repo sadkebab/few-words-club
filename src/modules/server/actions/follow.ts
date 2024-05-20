@@ -40,7 +40,7 @@ export const followUserAction = userAction(
       throw new ActionError("Failed to follow user");
     }
 
-    void sendFollowNotification({
+    await sendFollowNotification({
       originId: userData.id,
       targetId: userId,
       originUsername: userData.username,
@@ -64,7 +64,7 @@ export const unfollowUserAction = userAction(
       throw new ActionError("Failed to delete post");
     }
 
-    void removeFollowNotification({
+    await removeFollowNotification({
       originId: userData.id,
       targetId: userId,
     });

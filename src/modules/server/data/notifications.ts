@@ -45,7 +45,6 @@ export async function sendLikeNotification({
 
   if (alreadyNotified) {
     console.warn(`Already notified like, skipping. [${userId} -> ${postId}]`);
-
     return;
   }
 
@@ -57,7 +56,7 @@ export async function sendLikeNotification({
     target: post.authorId,
   });
 
-  void dispatch({
+  await dispatch({
     channel: "notification",
     event: post.authorId,
     data: null,
@@ -88,7 +87,7 @@ export async function removeLikeNotification({
       ),
     );
 
-  void dispatch({
+  await dispatch({
     channel: "notification",
     event: post.authorId,
     data: null,
@@ -124,7 +123,7 @@ export async function sendFollowNotification({
       `Already notified follow, skipping. [${originId} -> ${targetId}]`,
     );
 
-    void dispatch({
+    await dispatch({
       channel: "notification",
       event: targetId,
       data: null,
@@ -156,7 +155,7 @@ export async function removeFollowNotification({
       ),
     );
 
-  void dispatch({
+  await dispatch({
     channel: "notification",
     event: targetId,
     data: null,

@@ -27,7 +27,7 @@ export const clearNotificationAction = userAction(
       throw new ActionError("Failed to follow user");
     }
 
-    void dispatch({
+    await dispatch({
       channel: "notification",
       event: userData.id,
       data: null,
