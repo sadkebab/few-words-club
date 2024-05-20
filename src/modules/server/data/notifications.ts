@@ -29,6 +29,10 @@ export async function sendLikeNotification({
     return;
   }
 
+  if (post.authorId === userId) {
+    return;
+  }
+
   const alreadyNotified = await db.query.Notifications.findFirst({
     where: (table, cmp) =>
       cmp.and(
@@ -101,6 +105,11 @@ export async function sendFollowNotification({
   originId,
   originUsername,
 }: FollowNotificationOptions & { originUsername: string }) {
+  if (targetId === originId) {
+    console.warn("User tried to follow themselves, skipping.");
+    return;
+  }
+
   const alreadyNotified = await db.query.Notifications.findFirst({
     where: (table, cmp) =>
       cmp.and(
