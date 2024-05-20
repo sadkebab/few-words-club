@@ -73,7 +73,7 @@ export async function userFollowersPaginated({
       followed: sql<boolean>`${UserFollows.origin} = ${viewerId}`,
     })
     .from(Follows)
-    .innerJoin(UserData, eq(Follows.target, UserData.id))
+    .innerJoin(UserData, eq(Follows.origin, UserData.id))
     .leftJoin(
       UserFollows,
       and(
