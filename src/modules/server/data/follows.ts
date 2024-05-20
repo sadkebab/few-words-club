@@ -5,11 +5,15 @@ import { Follows, UserData } from "@/modules/db/schema";
 import { eq, desc, and, count, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
-export async function userFollowingPaginated(
-  userId: string,
-  limit: number,
-  offset: number,
-) {
+export async function userFollowingPaginated({
+  userId,
+  limit,
+  offset,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+}) {
   const viewerId = (await safe(currentUserData))?.id;
 
   const UserFollows = alias(Follows, "user_follows");
@@ -47,11 +51,15 @@ export async function userFollowingPaginated(
   return { data: follows, nextCursor: next >= total ? null : next };
 }
 
-export async function userFollowersPaginated(
-  userId: string,
-  limit: number,
-  offset: number,
-) {
+export async function userFollowersPaginated({
+  userId,
+  limit,
+  offset,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+}) {
   const viewerId = (await safe(currentUserData))?.id;
 
   const UserFollows = alias(Follows, "user_follows");

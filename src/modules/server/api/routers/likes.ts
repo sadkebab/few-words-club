@@ -13,7 +13,11 @@ export const likesRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { cursor, pageSize, postId } = input;
-      const res = await postLikesPaginated(postId, pageSize, cursor ?? 0);
+      const res = await postLikesPaginated({
+        postId,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
 });

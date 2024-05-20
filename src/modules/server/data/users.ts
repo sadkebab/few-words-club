@@ -75,7 +75,7 @@ export async function unreadCounter(userId: string) {
     .select({ count: count() })
     .from(Notifications)
     .where(
-      and(eq(Notifications.userId, userId), eq(Notifications.seen, false)),
+      and(eq(Notifications.target, userId), eq(Notifications.cleared, false)),
     );
 
   const messages = await db

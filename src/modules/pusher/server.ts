@@ -9,10 +9,14 @@ const pusher = new Pusher({
   cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
 });
 
-export async function dispatch<T extends PusherChannel>(
-  channel: T,
-  event: string,
-  data: PusherPayload<T>,
-) {
+export async function dispatch<T extends PusherChannel>({
+  channel,
+  event,
+  data,
+}: {
+  channel: T;
+  event: string;
+  data: PusherPayload<T>;
+}) {
   await pusher.trigger(channel, event, data);
 }

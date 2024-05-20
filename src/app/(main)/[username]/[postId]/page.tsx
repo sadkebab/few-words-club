@@ -1,7 +1,7 @@
 import { safe } from "@/lib/safe-actions";
 import { userPost } from "@/modules/server/data/posts";
 import { currentUserData, usernameId } from "@/modules/server/data/users";
-import { PostView } from "./client";
+import { PostView } from "../../../../components/post/post-view";
 import { GhostPlaceholder } from "@/components/ghost-placeholder";
 
 export default async function Page({

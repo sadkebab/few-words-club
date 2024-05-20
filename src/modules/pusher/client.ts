@@ -8,11 +8,15 @@ const clientPusher = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
   cluster: env.NEXT_PUBLIC_PUSHER_CLUSTER,
 });
 
-export default function useNotificationListener<T extends PusherChannel>(
-  channelName: T,
-  event: string,
-  effect: (data: PusherPayload<T>) => void,
-) {
+export default function useRealTimeEvent<T extends PusherChannel>({
+  channel: channelName,
+  event,
+  effect,
+}: {
+  channel: T;
+  event: string;
+  effect: (data: PusherPayload<T>) => void | Promise<void>;
+}) {
   useEffect(() => {
     const channel = clientPusher.subscribe(channelName);
     channel.bind(event, effect);

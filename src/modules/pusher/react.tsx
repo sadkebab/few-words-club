@@ -1,6 +1,6 @@
 "use client";
 
-import useNotificationListener from "@/modules/pusher/client";
+import useRealTimeEvent from "@/modules/pusher/client";
 import { useRouter } from "next/navigation";
 import { type PusherPayload, type PusherChannel } from "./common";
 
@@ -14,7 +14,7 @@ export function EffectListener<T extends PusherChannel>({
   event: string;
   effect: (data: PusherPayload<T>) => void;
 }) {
-  useNotificationListener(channel, event, effect);
+  useRealTimeEvent({ channel, event, effect });
   return <></>;
 }
 
@@ -27,8 +27,10 @@ export function RefreshListener<T extends PusherChannel>({
   event: string;
 }) {
   const router = useRouter();
-  useNotificationListener(channel, event, (_: PusherPayload<T>) =>
-    router.refresh(),
-  );
+  useRealTimeEvent({
+    channel,
+    event,
+    effect: (_: PusherPayload<T>) => router.refresh(),
+  });
   return <></>;
 }

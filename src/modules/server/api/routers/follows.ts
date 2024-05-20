@@ -16,7 +16,11 @@ export const followsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { cursor, pageSize, userId } = input;
-      const res = await userFollowersPaginated(userId, pageSize, cursor ?? 0);
+      const res = await userFollowersPaginated({
+        userId,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
   followingPaginated: publicProcedure
@@ -29,7 +33,11 @@ export const followsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { cursor, pageSize, userId } = input;
-      const res = await userFollowingPaginated(userId, pageSize, cursor ?? 0);
+      const res = await userFollowingPaginated({
+        userId,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
 });

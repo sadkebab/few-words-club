@@ -6,6 +6,10 @@ import { db } from "@/modules/db";
 import { ActionError } from "@/lib/safe-actions/error";
 import { Follows } from "@/modules/db/schema";
 import { and, eq } from "drizzle-orm";
+import {
+  removeFollowNotification,
+  sendFollowNotification,
+} from "../data/notifications";
 
 export const followUserAction = userAction(
   FollowActionSchema,
@@ -36,6 +40,12 @@ export const followUserAction = userAction(
       throw new ActionError("Failed to follow user");
     }
 
+    void sendFollowNotification({
+      originId: userData.id,
+      targetId: userId,
+      originUsername: userData.username,
+    });
+
     return {
       followed: res[0]!.id,
     };
@@ -53,6 +63,11 @@ export const unfollowUserAction = userAction(
     if (res.length === 0) {
       throw new ActionError("Failed to delete post");
     }
+
+    void removeFollowNotification({
+      originId: userData.id,
+      targetId: userId,
+    });
 
     return {
       unfollowed: res[0]!.id,

@@ -31,6 +31,9 @@ export function Post({ postData }: { postData: PostData }) {
     },
     {
       initialData: postData,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     },
   );
 

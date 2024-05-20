@@ -60,11 +60,15 @@ function savedPostQuery(userId: string) {
     .$dynamic();
 }
 
-export async function userPostsPaginated(
-  userId: string,
-  limit: number,
-  offset: number,
-) {
+export async function userPostsPaginated({
+  userId,
+  limit,
+  offset,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+}) {
   const viewerId = (await safe(currentUserData))?.id;
 
   const posts = await postQuery(viewerId)
@@ -96,10 +100,13 @@ export async function singlePost(postId: string): Promise<PostData> {
   return posts[0]!;
 }
 
-export async function publicFeedPaginated(
-  limit: number,
-  offset: number,
-): Promise<{ data: PostData[]; nextCursor: number | null }> {
+export async function publicFeedPaginated({
+  limit,
+  offset,
+}: {
+  limit: number;
+  offset: number;
+}): Promise<{ data: PostData[]; nextCursor: number | null }> {
   const viewerId = (await safe(currentUserData))?.id;
 
   const posts = await postQuery(viewerId)
@@ -115,11 +122,15 @@ export async function publicFeedPaginated(
   return { data: posts, nextCursor: next >= total ? null : next };
 }
 
-export async function followedFeedPaginated(
-  userId: string,
-  limit: number,
-  offset: number,
-): Promise<{ data: PostData[]; nextCursor: number | null }> {
+export async function followedFeedPaginated({
+  userId,
+  limit,
+  offset,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+}): Promise<{ data: PostData[]; nextCursor: number | null }> {
   const viewerId = (await safe(currentUserData))?.id;
   const qb = new QueryBuilder();
   const isSaved = inArray(
@@ -149,11 +160,15 @@ export async function followedFeedPaginated(
   return { data: posts, nextCursor: next >= total ? null : next };
 }
 
-export async function savedFeedPaginated(
-  userId: string,
-  limit: number,
-  offset: number,
-): Promise<{ data: PostData[]; nextCursor: number | null }> {
+export async function savedFeedPaginated({
+  userId,
+  limit,
+  offset,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+}): Promise<{ data: PostData[]; nextCursor: number | null }> {
   const qb = new QueryBuilder();
   const posts = await savedPostQuery(userId)
     .where(
@@ -182,11 +197,15 @@ export async function savedFeedPaginated(
   return { data: posts, nextCursor: next >= total ? null : next };
 }
 
-export async function likeFeedPaginated(
-  userId: string,
-  limit: number,
-  offset: number,
-): Promise<{ data: PostData[]; nextCursor: number | null }> {
+export async function likeFeedPaginated({
+  userId,
+  limit,
+  offset,
+}: {
+  userId: string;
+  limit: number;
+  offset: number;
+}): Promise<{ data: PostData[]; nextCursor: number | null }> {
   const UserLikes = alias(Likes, "user_likes");
 
   const posts = await db

@@ -9,7 +9,7 @@ export function IssuePlaceholder({ className }: { className?: string }) {
         className,
       )}
     >
-      <div className="flex flex-col items-center justify-between">
+      <div className="flex flex-col items-center justify-between p-8">
         <TriangleAlert className="size-[2.5rem] stroke-muted-foreground" />
         <p className="text-lg font-medium text-muted-foreground">
           There was an issue fetching data.

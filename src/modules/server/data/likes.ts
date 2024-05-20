@@ -2,11 +2,15 @@ import { db } from "@/modules/db";
 import { Likes, UserData } from "@/modules/db/schema";
 import { count, desc, eq } from "drizzle-orm";
 
-export async function postLikesPaginated(
-  postId: string,
-  limit: number,
-  offset: number,
-) {
+export async function postLikesPaginated({
+  postId,
+  limit,
+  offset,
+}: {
+  postId: string;
+  limit: number;
+  offset: number;
+}) {
   const likes = await db
     .select({
       id: Likes.id,
@@ -20,6 +24,8 @@ export async function postLikesPaginated(
     .from(Likes)
     .innerJoin(UserData, eq(UserData.id, Likes.userId))
     .where(eq(Likes.postId, postId))
+    .limit(limit)
+    .offset(offset)
     .orderBy(desc(Likes.created));
 
   const countRes = await db

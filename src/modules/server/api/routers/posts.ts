@@ -35,14 +35,21 @@ export const postsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { userId, pageSize, cursor } = input;
-      const res = await userPostsPaginated(userId, pageSize, cursor ?? 0);
+      const res = await userPostsPaginated({
+        userId,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
   publicFeed: publicProcedure
     .input(z.object({ pageSize: z.number(), cursor: z.number().nullish() }))
     .query(async ({ input }) => {
       const { cursor, pageSize } = input;
-      const res = await publicFeedPaginated(pageSize, cursor ?? 0);
+      const res = await publicFeedPaginated({
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
   followedFeed: publicProcedure
@@ -55,7 +62,11 @@ export const postsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { cursor, pageSize, userId } = input;
-      const res = await followedFeedPaginated(userId, pageSize, cursor ?? 0);
+      const res = await followedFeedPaginated({
+        userId,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
   savedFeed: userProcedure
@@ -67,7 +78,11 @@ export const postsRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const { cursor, pageSize } = input;
-      const res = await savedFeedPaginated(ctx.user.id, pageSize, cursor ?? 0);
+      const res = await savedFeedPaginated({
+        userId: ctx.user.id,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
 
@@ -81,7 +96,11 @@ export const postsRouter = createTRPCRouter({
     )
     .query(async ({ input }) => {
       const { cursor, pageSize, userId } = input;
-      const res = await likeFeedPaginated(userId, pageSize, cursor ?? 0);
+      const res = await likeFeedPaginated({
+        userId,
+        limit: pageSize,
+        offset: cursor ?? 0,
+      });
       return res;
     }),
 });

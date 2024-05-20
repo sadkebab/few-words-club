@@ -21,6 +21,7 @@ import { safe } from "@/lib/safe-actions";
 import { Badge } from "@/components/ui/badge";
 import { CreatePostButton } from "@/components/post/create-post-button";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { NotificationCounter } from "@/components/notification-counter";
 
 export async function MainLayout({
   children,
@@ -74,6 +75,7 @@ async function Toolbar() {
   }
 
   const unread = await unreadCounter(userData.id);
+  console.log(unread);
 
   const userDisplay = (
     <div className="flex items-center gap-4">
@@ -111,7 +113,13 @@ async function Toolbar() {
             <Mail />
           </ToolbarButton>
           <ToolbarButton href="/notifications">
-            Notifications <Bell />
+            <NotificationCounter
+              count={unread.notifications}
+              userId={userData.id}
+            >
+              Notifications
+            </NotificationCounter>
+            <Bell />
           </ToolbarButton>
           <ToolbarButton href="/search">
             Search <Search />
@@ -150,12 +158,13 @@ function Counter({
   count: number;
   children: React.ReactNode;
 }) {
+  console.log("counter", count);
   if (count === 0) {
     return <>{children}</>;
   }
 
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-2">
       {children}
       <Badge>{count}</Badge>
     </div>

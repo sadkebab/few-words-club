@@ -7,6 +7,7 @@ import {
   serial,
   timestamp,
   integer,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
 const pgTable = pgTableCreator((name) => `fwc_${name}`);
@@ -178,21 +179,32 @@ export const DirectMessages = pgTable(
   }),
 );
 
+export const notificationTypeEnum = pgEnum("notification_type", [
+  "like",
+  "follow",
+]);
+
 export const Notifications = pgTable(
   "notifications",
   {
     id: serial("id").primaryKey(),
-    userId: text("user_id")
+    origin: text("origin")
       .notNull()
       .references(() => UserData.id, { onDelete: "cascade" }),
-    content: text("content").notNull(),
-    actionUrl: text("action_url").notNull(),
-    seen: boolean("seen").notNull().default(false),
-    updated: timestamp("updated")
+    target: text("target")
+      .notNull()
+      .references(() => UserData.id, { onDelete: "cascade" }),
+    type: notificationTypeEnum("notification_type").notNull(),
+    entityId: text("entity_id").notNull(),
+    link: text("link").notNull(),
+    cleared: boolean("cleared").notNull().default(false),
+    created: timestamp("created")
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
-    userIdIdx: index("notification_user_id").on(table.userId),
+    originIdx: index("notification_origin").on(table.origin),
+    targetIdx: index("notification_target").on(table.target),
+    entityIdIdx: index("notification_entity_id").on(table.entityId),
   }),
 );
