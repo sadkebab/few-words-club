@@ -8,10 +8,7 @@ import { Bookmark, Heart } from "lucide-react";
 import { Button } from "../ui/button";
 import { usePostContext } from "./context";
 import { useAction } from "next-safe-action/hooks";
-import {
-  savePostAction,
-  unsavePostAction,
-} from "@/modules/server/posts/actions";
+
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { api } from "@/modules/trpc/react";
@@ -25,6 +22,10 @@ import {
   likePostAction,
   unlikePostAction,
 } from "@/modules/server/likes/actions";
+import {
+  savePostAction,
+  unsavePostAction,
+} from "@/modules/server/saves/actions";
 
 export function Post({ postData }: { postData: PostData }) {
   const { data: post, refetch } = api.posts.single.useQuery(
