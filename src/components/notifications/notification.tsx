@@ -11,7 +11,7 @@ import { api } from "@/modules/trpc/react";
 import { useAction } from "next-safe-action/hooks";
 import { clearNotificationAction } from "@/modules/server/actions/notification";
 import { useState } from "react";
-import { notificationCounterStore } from "@/modules/stores/counters";
+import { notificationCounterStore } from "@/modules/client-state/counters";
 
 export function NotificationCard({
   notificationData,

@@ -2,7 +2,7 @@
 import useRealTimeEvent from "@/modules/pusher/client";
 import { api } from "@/modules/trpc/react";
 import { Badge } from "./ui/badge";
-import { notificationCounterStore } from "@/modules/stores/counters";
+import { notificationCounterStore } from "@/modules/client-state/counters";
 import { useEffect } from "react";
 
 export function NotificationCounter({
@@ -22,24 +22,19 @@ export function NotificationCounter({
     refresh(count);
   }, [count, refresh]);
 
-  const { data, refetch } = api.notifications.unclearedCount.useQuery(
-    undefined,
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      initialData: () => {
-        return { count };
-      },
+  const { refetch } = api.notifications.unclearedCount.useQuery(undefined, {
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    initialData: () => {
+      return { count };
     },
-  );
+    onSuccess: (data) => {
+      refresh(data.count);
+    },
+  });
 
   const utils = api.useUtils();
-
-  // const optimisticCount = useMemo(
-  //   () => notificationCounterStore((state) => state.refresh(data.count)),
-  //   [data.count],
-  // );
 
   useRealTimeEvent({
     channel: "notification",
@@ -50,7 +45,7 @@ export function NotificationCounter({
     },
   });
 
-  if (data.count === 0) {
+  if (optimisticCount === 0) {
     return <>{children}</>;
   }
 
