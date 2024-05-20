@@ -8,7 +8,7 @@ export const notificationCounterStore = create<{
   refresh: (count: number) => number;
 }>((set) => ({
   count: 0,
-  decrease: () => set((state) => ({ count: state.count + 1 })),
+  decrease: () => set((state) => ({ count: state.count - 1 })),
   refresh: (count: number) => {
     set({ count });
     return count;
