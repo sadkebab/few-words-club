@@ -5,7 +5,7 @@ import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
 
-import { type AppRouter } from "@/modules/server/api/root";
+import { type AppRouter } from "@/modules/server/root";
 import { getUrl, transformer } from "./shared";
 import { env } from "@/env";
 

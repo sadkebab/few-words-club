@@ -59,7 +59,7 @@ export async function sendLikeNotification({
   await dispatch({
     channel: "notification",
     event: post.authorId,
-    data: null,
+    payload: null,
   });
 }
 
@@ -90,7 +90,7 @@ export async function removeLikeNotification({
   await dispatch({
     channel: "notification",
     event: post.authorId,
-    data: null,
+    payload: null,
   });
 }
 
@@ -126,7 +126,7 @@ export async function sendFollowNotification({
     await dispatch({
       channel: "notification",
       event: targetId,
-      data: null,
+      payload: null,
     });
 
     return;
@@ -158,7 +158,7 @@ export async function removeFollowNotification({
   await dispatch({
     channel: "notification",
     event: targetId,
-    data: null,
+    payload: null,
   });
 }
 

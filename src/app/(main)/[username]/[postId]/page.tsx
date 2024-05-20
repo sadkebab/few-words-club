@@ -1,6 +1,6 @@
 import { safe } from "@/lib/safe-actions";
-import { userPost } from "@/modules/server/data/posts";
-import { currentUserData, usernameId } from "@/modules/server/data/users";
+import { userPost } from "@/modules/server/posts/data";
+import { currentUserData, usernameId } from "@/modules/server/user-data/data";
 import { PostView } from "../../../../components/post/post-view";
 import { GhostPlaceholder } from "@/components/ghost-placeholder";
 

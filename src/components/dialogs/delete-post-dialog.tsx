@@ -1,6 +1,6 @@
 "use client";
 
-import { type PostData } from "@/modules/server/data/posts";
+import { type PostData } from "@/modules/server/posts/data";
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,7 @@ import { Loader2, Origami } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
-import { deletePostAction } from "@/modules/server/actions/posts";
+import { deletePostAction } from "@/modules/server/posts/actions";
 import { toast } from "@/components/ui/use-toast";
 
 export function DeletePostDialog({

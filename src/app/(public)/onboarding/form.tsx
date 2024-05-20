@@ -16,9 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { saveUserDataAction } from "@/modules/server/actions/onboarding";
+import { saveUserDataAction } from "@/modules/server/user-data/actions";
 import { useState } from "react";
-import { SaveUserSchema } from "@/modules/server/validators/onboarding";
+import { SaveUserSchema } from "@/modules/server/user-data/validators";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { Combobox } from "@/components/combobox";

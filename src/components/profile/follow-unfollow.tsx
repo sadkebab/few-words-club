@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   followUserAction,
   unfollowUserAction,
-} from "@/modules/server/actions/follow";
+} from "@/modules/server/follows/actions";
 import { UserMinus2, UserPlus2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useCallback, useState } from "react";

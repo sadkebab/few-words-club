@@ -1,5 +1,5 @@
 import { safe } from "@/lib/safe-actions";
-import { currentUserData } from "./users";
+import { currentUserData } from "../user-data/data";
 import { db } from "@/modules/db";
 import { Follows, UserData } from "@/modules/db/schema";
 import { eq, desc, and, count, sql } from "drizzle-orm";

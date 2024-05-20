@@ -5,7 +5,7 @@ import { db } from "@/modules/db";
 import {
   currentUserData,
   userDataWithStats,
-} from "@/modules/server/data/users";
+} from "@/modules/server/user-data/data";
 import { Suspense } from "react";
 import { FollowButton } from "@/components/profile/follow-unfollow";
 import { DummyFollow } from "@/components/profile/dummy-follow";

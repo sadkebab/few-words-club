@@ -16,7 +16,10 @@ import { ToolbarButton } from "@/components/client-buttons";
 import { Fonts } from "@/lib/fonts";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 
-import { currentUserData, unreadCounter } from "@/modules/server/data/users";
+import {
+  currentUserData,
+  unreadCounter,
+} from "@/modules/server/user-data/data";
 import { safe } from "@/lib/safe-actions";
 import { Badge } from "@/components/ui/badge";
 import { CreatePostButton } from "@/components/post/create-post-button";

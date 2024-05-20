@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CardHeader } from "@/components/ui/card";
-import { type FollowerData } from "@/modules/server/data/follows";
+import { type FollowerData } from "@/modules/server/follows/data";
 import { FollowButton } from "./follow-unfollow";
 import Link from "next/link";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";

@@ -5,7 +5,7 @@ import {
 } from "@trpc/client";
 
 import { getUrl, transformer } from "./shared";
-import { type AppRouter } from "@/modules/server/api/root";
+import { type AppRouter } from "@/modules/server/root";
 import { env } from "@/env";
 
 export const api = createTRPCProxyClient<AppRouter>({

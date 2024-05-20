@@ -1,6 +1,7 @@
 "use server";
+
 import { userAction } from "@/lib/safe-actions";
-import { NotificationActionSchema } from "../validators/notifications";
+import { NotificationActionSchema } from "./validators";
 import { db } from "@/modules/db";
 import { Notifications } from "@/modules/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -30,7 +31,7 @@ export const clearNotificationAction = userAction(
     await dispatch({
       channel: "notification",
       event: userData.id,
-      data: null,
+      payload: null,
     });
 
     return {

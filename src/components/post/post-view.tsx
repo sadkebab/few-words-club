@@ -1,6 +1,6 @@
 "use client";
 
-import { type PostData } from "@/modules/server/data/posts";
+import { type PostData } from "@/modules/server/posts/data";
 import { Post } from "@/components/post/post";
 import { PostContextProvider } from "@/components/post/context";
 import { api } from "@/modules/trpc/react";

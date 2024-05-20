@@ -14,13 +14,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { createPostAction } from "@/modules/server/actions/posts";
+import { createPostAction } from "@/modules/server/posts/actions";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
 import { type z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreatePostSchema } from "@/modules/server/validators/posts";
+import { CreatePostSchema } from "@/modules/server/posts/validators";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, Origami } from "lucide-react";
 import { Fonts } from "@/lib/fonts";

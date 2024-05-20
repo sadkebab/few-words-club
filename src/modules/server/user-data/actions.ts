@@ -1,6 +1,7 @@
 "use server";
+
 import { DEFAULT_BANNER, DEFAULT_THUMBNAIL } from "@/lib/constats";
-import { SaveUserSchema } from "../validators/onboarding";
+import { SaveUserSchema } from "./validators";
 import { authenticatedAction } from "@/lib/safe-actions";
 import { ActionError } from "@/lib/safe-actions/error";
 import { db } from "@/modules/db";

@@ -11,18 +11,18 @@ const clientPusher = new Pusher(env.NEXT_PUBLIC_PUSHER_KEY, {
 export default function useRealTimeEvent<T extends PusherChannel>({
   channel: channelName,
   event,
-  effect,
+  onEvent,
 }: {
   channel: T;
   event: string;
-  effect: (data: PusherPayload<T>) => void | Promise<void>;
+  onEvent: (data: PusherPayload<T>) => void | Promise<void>;
 }) {
   useEffect(() => {
     const channel = clientPusher.subscribe(channelName);
-    channel.bind(event, effect);
+    channel.bind(event, onEvent);
 
     return () => {
-      channel.unbind(event, effect);
+      channel.unbind(event, onEvent);
       clientPusher.unsubscribe(channelName);
     };
   });

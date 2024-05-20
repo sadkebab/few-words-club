@@ -1,7 +1,7 @@
 import { PostContextProvider } from "@/components/post/context";
 import { PublicFeed } from "@/components/feeds/public";
 import { safe } from "@/lib/safe-actions";
-import { currentUserData } from "@/modules/server/data/users";
+import { currentUserData } from "@/modules/server/user-data/data";
 import { QUERY_PAGE_SIZE } from "@/lib/constats";
 
 export default async function Page() {

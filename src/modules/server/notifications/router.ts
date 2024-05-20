@@ -4,7 +4,7 @@ import {
   singleNotification,
   unclearedNotificationCount,
   userNotificationsPaginated,
-} from "../../data/notifications";
+} from "./data";
 
 export const notificationsRouter = createTRPCRouter({
   userNotificationsPaginated: userProcedure

@@ -1,6 +1,6 @@
 "use client";
 
-import { type PostData } from "@/modules/server/data/posts";
+import { type PostData } from "@/modules/server/posts/data";
 import { CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
@@ -9,11 +9,9 @@ import { Button } from "../ui/button";
 import { usePostContext } from "./context";
 import { useAction } from "next-safe-action/hooks";
 import {
-  likePostAction,
   savePostAction,
-  unlikePostAction,
   unsavePostAction,
-} from "@/modules/server/actions/posts";
+} from "@/modules/server/posts/actions";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "../ui/use-toast";
 import { api } from "@/modules/trpc/react";
@@ -23,6 +21,10 @@ import { CounterLabel } from "../counter";
 import Link from "next/link";
 import { PostOptionsButton } from "./post-options-button";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";
+import {
+  likePostAction,
+  unlikePostAction,
+} from "@/modules/server/likes/actions";
 
 export function Post({ postData }: { postData: PostData }) {
   const { data: post, refetch } = api.posts.single.useQuery(

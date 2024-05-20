@@ -14,7 +14,7 @@ export function EffectListener<T extends PusherChannel>({
   event: string;
   effect: (data: PusherPayload<T>) => void;
 }) {
-  useRealTimeEvent({ channel, event, effect });
+  useRealTimeEvent({ channel, event, onEvent: effect });
   return <></>;
 }
 
@@ -30,7 +30,7 @@ export function RefreshListener<T extends PusherChannel>({
   useRealTimeEvent({
     channel,
     event,
-    effect: (_: PusherPayload<T>) => router.refresh(),
+    onEvent: (_: PusherPayload<T>) => router.refresh(),
   });
   return <></>;
 }

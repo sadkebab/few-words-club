@@ -5,7 +5,7 @@ import { type ComponentProps, useState } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
-import { skipMediaOnboardingAction } from "@/modules/server/actions/onboarding";
+import { skipMediaOnboardingAction } from "@/modules/server/user-data/actions";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 

@@ -12,11 +12,11 @@ const pusher = new Pusher({
 export async function dispatch<T extends PusherChannel>({
   channel,
   event,
-  data,
+  payload,
 }: {
   channel: T;
   event: string;
-  data: PusherPayload<T>;
+  payload: PusherPayload<T>;
 }) {
-  await pusher.trigger(channel, event, data);
+  await pusher.trigger(channel, event, payload);
 }

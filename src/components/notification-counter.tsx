@@ -39,7 +39,7 @@ export function NotificationCounter({
   useRealTimeEvent({
     channel: "notification",
     event: userId,
-    effect: async () => {
+    onEvent: async () => {
       await utils.notifications.unclearedCount.cancel();
       await refetch();
     },

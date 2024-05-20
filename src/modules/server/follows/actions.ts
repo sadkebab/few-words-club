@@ -1,7 +1,7 @@
 "use server";
 
 import { userAction } from "@/lib/safe-actions";
-import { FollowActionSchema } from "../validators/follows";
+import { FollowActionSchema } from "./validators";
 import { db } from "@/modules/db";
 import { ActionError } from "@/lib/safe-actions/error";
 import { Follows } from "@/modules/db/schema";
@@ -9,7 +9,7 @@ import { and, eq } from "drizzle-orm";
 import {
   removeFollowNotification,
   sendFollowNotification,
-} from "../data/notifications";
+} from "../notifications/data";
 
 export const followUserAction = userAction(
   FollowActionSchema,

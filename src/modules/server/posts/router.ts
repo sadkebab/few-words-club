@@ -2,7 +2,7 @@ import {
   createTRPCRouter,
   publicProcedure,
   userProcedure,
-} from "@/modules/server/api/trpc";
+} from "@/modules/server/trpc";
 import {
   followedFeedPaginated,
   likeFeedPaginated,
@@ -10,7 +10,7 @@ import {
   savedFeedPaginated,
   singlePost,
   userPostsPaginated,
-} from "@/modules/server/data/posts";
+} from "@/modules/server/posts/data";
 import { z } from "zod";
 
 export const postsRouter = createTRPCRouter({

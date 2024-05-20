@@ -1,4 +1,4 @@
-import { currentUserData, usernameId } from "@/modules/server/data/users";
+import { currentUserData, usernameId } from "@/modules/server/user-data/data";
 import { PostContextProvider } from "@/components/post/context";
 import { FollowerList } from "@/components/profile/lists/followers";
 import { QUERY_PAGE_SIZE } from "@/lib/constats";

@@ -2,7 +2,7 @@
 import { db } from "@/modules/db";
 import { Follows, Likes, Posts, Saves, UserData } from "../../db/schema";
 import { count, eq, desc, and, sql, inArray } from "drizzle-orm";
-import { currentUserData } from "./users";
+import { currentUserData } from "../user-data/data";
 import { safe } from "@/lib/safe-actions";
 import { QueryBuilder, alias } from "drizzle-orm/pg-core";
 

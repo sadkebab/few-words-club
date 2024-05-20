@@ -1,4 +1,4 @@
-import { type LikeData } from "@/modules/server/data/likes";
+import { type LikeData } from "@/modules/server/likes/data";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { Heart } from "lucide-react";

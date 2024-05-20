@@ -1,6 +1,6 @@
 "use client";
 
-import { type PostData } from "@/modules/server/data/posts";
+import { type PostData } from "@/modules/server/posts/data";
 import {
   Dialog,
   DialogContent,
@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
-import { editPostAction } from "@/modules/server/actions/posts";
+import { editPostAction } from "@/modules/server/posts/actions";
 import { useForm } from "react-hook-form";
-import { EditPostSchema } from "@/modules/server/validators/posts";
+import { EditPostSchema } from "@/modules/server/posts/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/use-toast";
 import {

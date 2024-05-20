@@ -1,9 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import {
-  userFollowersPaginated,
-  userFollowingPaginated,
-} from "../../data/follows";
+import { userFollowersPaginated, userFollowingPaginated } from "./data";
 
 export const followsRouter = createTRPCRouter({
   followersPaginated: publicProcedure

@@ -1,6 +1,6 @@
 "use client";
 
-import { type NotificationData } from "@/modules/server/data/notifications";
+import { type NotificationData } from "@/modules/server/notifications/data";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 import { Heart, UserPlus2 } from "lucide-react";
@@ -9,7 +9,7 @@ import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { cn } from "@/lib/utils";
 import { api } from "@/modules/trpc/react";
 import { useAction } from "next-safe-action/hooks";
-import { clearNotificationAction } from "@/modules/server/actions/notification";
+import { clearNotificationAction } from "@/modules/server/notifications/actions";
 import { useState } from "react";
 import { notificationCounterStore } from "@/modules/client-state/counters";
 

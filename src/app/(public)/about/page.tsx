@@ -27,8 +27,8 @@ export default async function Page() {
           </p>
           <p>
             It was made with Next.js 14 and the app router with libraries like
-            Tailwind, tRPC, Drizzle ORM, shadcn/ui, next-safe-action and
-            react-hook-form
+            Tailwind, tRPC, zustand, Drizzle ORM, shadcn/ui, next-safe-action
+            and react-hook-form
           </p>
           <p>
             It also integrates several SaaS platforms for features like

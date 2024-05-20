@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { postLikesPaginated } from "../../data/likes";
+import { postLikesPaginated } from "./data";
 
 export const likesRouter = createTRPCRouter({
   postLikesPaginated: publicProcedure
