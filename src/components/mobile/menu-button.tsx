@@ -20,6 +20,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { useState } from "react";
+import { SignOutButton } from "../sign-out-button";
 
 export function MobileMenuButton({
   className,
@@ -65,13 +66,16 @@ export function MobileMenuButton({
             <Search />
           </MobileMenuButtonItem>
         </div>
-        <DialogFooter className="flex flex-row gap-1">
-          <Button size={"icon"} variant={"outline"} asChild>
-            <Link href={"/about"}>
-              <Origami />
-            </Link>
-          </Button>
-          <ThemeToggle />
+        <DialogFooter className="flex flex-row justify-between gap-1">
+          <div className="flex gap-1">
+            <Button size={"icon"} variant={"outline"} asChild>
+              <Link href={"/about"}>
+                <Origami />
+              </Link>
+            </Button>
+            <ThemeToggle />
+          </div>
+          <SignOutButton variant={"secondary"} />
         </DialogFooter>
       </DialogContent>
     </Dialog>

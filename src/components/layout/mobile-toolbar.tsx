@@ -7,6 +7,7 @@ import {
   Origami,
   PenBox,
   Menu,
+  Home,
 } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -85,7 +86,7 @@ export function MobileToolbar({
         <div className="flex items-end gap-2">
           <Button variant={"outline"} size={"icon"} asChild>
             <Link href="/">
-              <Globe2 className="size-4" />
+              <Home className="size-4" />
             </Link>
           </Button>
           <Button variant={"outline"} size={"icon"} asChild>
