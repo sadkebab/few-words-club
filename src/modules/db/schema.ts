@@ -43,7 +43,7 @@ export const Posts = pgTable(
     id: text("id").primaryKey().unique(),
     authorId: text("author_id")
       .notNull()
-      .references(() => UserData.id),
+      .references(() => UserData.id, { onDelete: "cascade" }),
     content: text("content").notNull(),
     created: timestamp("created")
       .notNull()
