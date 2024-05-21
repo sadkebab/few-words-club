@@ -2,7 +2,6 @@
 
 import { type PostData } from "@/modules/server/posts/data";
 import { CardContent, CardFooter, CardHeader } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 import { Bookmark, Heart } from "lucide-react";
 import { Button } from "../ui/button";
@@ -17,7 +16,6 @@ import { humanDateDiff } from "@/lib/react/date";
 import { CounterLabel } from "../counter";
 import Link from "next/link";
 import { PostOptionsButton } from "./post-options-button";
-import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import {
   likePostAction,
   unlikePostAction,
@@ -26,9 +24,9 @@ import {
   savePostAction,
   unsavePostAction,
 } from "@/modules/server/saves/actions";
-import { mediaUrl } from "@/lib/utils/urls";
+import { UserAvatar } from "../user-avatar";
 
-export function Post({ postData }: { postData: PostData }) {
+export function PostCard({ postData }: { postData: PostData }) {
   const { data: post, refetch } = api.posts.single.useQuery(
     {
       postId: postData.id,
@@ -52,16 +50,13 @@ export function Post({ postData }: { postData: PostData }) {
     <div className="border-b">
       <CardHeader className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-2">
-          <Link href={`/${post.author?.username}`}>
-            <Avatar className="size-12">
-              <AvatarFallback>
-                {post.author?.displayName?.slice(0, 2) ?? "N/A"}
-              </AvatarFallback>
-              <AvatarImage
-                src={mediaUrl(post.author?.picture ?? DEFAULT_THUMBNAIL)}
-              />
-            </Avatar>
+          <Link
+            className="rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            href={`/${post.author?.username}`}
+          >
+            <UserAvatar userData={post.author} className="size-12" />
           </Link>
+
           <div className="flex flex-col leading-none">
             <Link href={`/${post.author?.username}`}>
               <h3 className="font-medium">{post.author?.displayName}</h3>
@@ -80,9 +75,14 @@ export function Post({ postData }: { postData: PostData }) {
         </div>
         {canEdit && <PostOptionsButton post={post} />}
       </CardHeader>
-      <Link href={`/${post.author?.username}/${post.id}`}>
-        <CardContent>{post.content}</CardContent>
-      </Link>
+      <CardContent>
+        <Link
+          className="focus-visible:underline focus-visible:ring-0"
+          href={`/${post.author?.username}/${post.id}`}
+        >
+          <p>{post.content}</p>
+        </Link>
+      </CardContent>
       <CardFooter className="flex gap-1">
         {viewerId ? (
           <>

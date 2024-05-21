@@ -1,12 +1,9 @@
-- Cloudflare R2 profile pictures
-- Profile Picture Upload
-- Profile Edit
-- Notifications
 - Direct Messages
 - User Reccomendations
 - Search
 
-TODO
+FIX
 
+- unique username error throw
 - freeze queries in time
 - use timestamp+id as cursor

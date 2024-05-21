@@ -1,18 +1,16 @@
 "use client";
 
 import { type NotificationData } from "@/modules/server/notifications/data";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Skeleton } from "../ui/skeleton";
 import { Heart, UserPlus2 } from "lucide-react";
 import Link from "next/link";
-import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { cn } from "@/lib/utils";
 import { api } from "@/modules/trpc/react";
 import { useAction } from "next-safe-action/hooks";
 import { clearNotificationAction } from "@/modules/server/notifications/actions";
 import { useState } from "react";
 import { notificationCounterStore } from "@/modules/client-state/counters";
-import { mediaUrl } from "@/lib/utils/urls";
+import { UserAvatar } from "../user-avatar";
 
 export function NotificationCard({
   notificationData,
@@ -65,16 +63,7 @@ export function NotificationCard({
       onClick={handleClear}
     >
       <div className="flex flex-row items-center gap-4">
-        <Link href={`/${notification.origin.username}`}>
-          <Avatar className="size-8">
-            <AvatarFallback>
-              {notification.origin.displayName?.slice(0, 2)}
-            </AvatarFallback>
-            <AvatarImage
-              src={mediaUrl(notification.origin.picture ?? DEFAULT_THUMBNAIL)}
-            />
-          </Avatar>
-        </Link>
+        <UserAvatar userData={notification.origin} className="size-8" />
         <div className="flex items-center gap-2">
           <p className="leading-none">
             <Link href={`/${notification.origin.username}`}>

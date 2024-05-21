@@ -1,22 +1,13 @@
 import { type LikeData } from "@/modules/server/likes/data";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { DEFAULT_THUMBNAIL } from "@/lib/constats";
 import { Heart } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
-import { mediaUrl } from "@/lib/utils/urls";
+import { UserAvatar } from "../user-avatar";
 
 export function LikeCard({ likeData }: { likeData: LikeData }) {
   return (
     <div className="flex flex-row items-center justify-between border-b p-6">
       <div className="flex flex-row items-center gap-4">
-        <Avatar className="size-8">
-          <AvatarFallback>
-            {likeData.user.displayName?.slice(0, 2)}
-          </AvatarFallback>
-          <AvatarImage
-            src={mediaUrl(likeData.user.picture ?? DEFAULT_THUMBNAIL)}
-          />
-        </Avatar>
+        <UserAvatar userData={likeData.user} className="size-8" />
         <div className="flex items-center gap-2">
           <span className="font-medium">{likeData.user.displayName}</span>
           <span className="text-sm font-light">@{likeData.user.username}</span>

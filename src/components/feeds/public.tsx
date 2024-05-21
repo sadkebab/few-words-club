@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect } from "react";
-import { Post, PostSkeleton } from "../post/post";
+import { PostCard, PostSkeleton } from "../post/post";
 import { api } from "@/modules/trpc/react";
 import { toast } from "@/components/ui/use-toast";
 import { QueryTrigger } from "../post/trigger";
@@ -47,7 +47,7 @@ export function PublicFeed({ pageSize }: { pageSize: number }) {
           {data.pages.map((group, i) => (
             <Fragment key={i}>
               {group.data.map((post) => (
-                <Post postData={post} key={post.id} />
+                <PostCard postData={post} key={post.id} />
               ))}
             </Fragment>
           ))}

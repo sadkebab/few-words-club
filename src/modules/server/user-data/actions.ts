@@ -1,6 +1,6 @@
 "use server";
 
-import { DEFAULT_COVER, DEFAULT_THUMBNAIL } from "@/lib/constats";
+import { DEFAULT_COVER } from "@/lib/constats";
 import {
   SaveUserMediaSchema,
   SaveUserSchema,
@@ -18,10 +18,24 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { waitUntil } from "@vercel/functions";
 import { deleteFile } from "@/lib/s3";
+import { first } from "@/lib/drizzle";
 
 export const saveUserDataAction = authenticatedAction(
   SaveUserSchema,
   async ({ username, displayName, country: location, bio }, { user }) => {
+    const existing = await first(
+      db
+        .select({
+          id: UserData.id,
+        })
+        .from(UserData)
+        .where(eq(UserData.username, username)),
+    );
+
+    if (existing) {
+      throw new ActionError("Username already taken");
+    }
+
     const id = nanoid();
 
     const result = await db
