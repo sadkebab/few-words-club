@@ -6,7 +6,7 @@ import { Camera, Loader2 } from "lucide-react";
 import { fileFromBase64 } from "@/lib/utils/b64";
 import { UserDataMediaValidator } from "@/modules/server/files/validators";
 import { uploadFile } from "@/lib/upload";
-import { updateCoverPrictureAction as updateCoverAction } from "@/modules/server/user-data/actions";
+import { updateCoverAction } from "@/modules/server/user-data/actions";
 import { toast } from "../ui/use-toast";
 import { useState } from "react";
 

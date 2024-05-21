@@ -7,7 +7,7 @@ import {
   UpdateMediaSchema,
   UpdateUserDataSchema,
 } from "./validators";
-import { authenticatedAction, userAction } from "@/lib/safe-actions";
+import { authenticatedAction, safe, userAction } from "@/lib/safe-actions";
 import { ActionError } from "@/lib/safe-actions/error";
 import { db } from "@/modules/db";
 
@@ -16,6 +16,8 @@ import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { waitUntil } from "@vercel/functions";
+import { deleteFile } from "@/lib/s3";
 
 export const saveUserDataAction = authenticatedAction(
   SaveUserSchema,
@@ -107,6 +109,8 @@ export const saveUserMediaAction = userAction(
 export const updateProfilePrictureAction = userAction(
   UpdateMediaSchema,
   async ({ source }, { userData }) => {
+    const { picture: currentPicture } = userData;
+
     const result = await db
       .update(UserData)
       .set({
@@ -119,13 +123,15 @@ export const updateProfilePrictureAction = userAction(
       throw new ActionError("Failed to update profile picture");
     }
 
+    waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
     return revalidatePath(`/${userData.username}`);
   },
 );
 
-export const updateCoverPrictureAction = userAction(
+export const updateCoverAction = userAction(
   UpdateMediaSchema,
   async ({ source }, { userData }) => {
+    const { cover: currentPicture } = userData;
     const result = await db
       .update(UserData)
       .set({
@@ -137,7 +143,7 @@ export const updateCoverPrictureAction = userAction(
     if (result.length === 0) {
       throw new ActionError("Failed to update profile picture");
     }
-
+    waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
     return revalidatePath(`/${userData.username}`);
   },
 );
