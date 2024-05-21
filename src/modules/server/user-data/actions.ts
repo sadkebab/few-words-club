@@ -72,8 +72,7 @@ export const skipMediaOnboardingAction = authenticatedAction(
     const result = await db
       .update(UserData)
       .set({
-        picture: DEFAULT_THUMBNAIL,
-        cover: DEFAULT_COVER,
+        onboardingCompleted: true,
       })
       .where(eq(UserData.clerkId, user.id))
       .returning();
@@ -94,6 +93,7 @@ export const saveUserMediaAction = userAction(
       .set({
         cover: cover ?? DEFAULT_COVER,
         picture,
+        onboardingCompleted: true,
       })
       .where(eq(UserData.id, userData.id))
       .returning();
@@ -123,9 +123,7 @@ export const updateProfilePrictureAction = userAction(
       throw new ActionError("Failed to update profile picture");
     }
 
-    if (currentPicture != null && currentPicture !== DEFAULT_THUMBNAIL) {
-      waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
-    }
+    waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
 
     return revalidatePath(`/${userData.username}`);
   },
@@ -147,9 +145,7 @@ export const updateCoverAction = userAction(
       throw new ActionError("Failed to update profile picture");
     }
 
-    if (currentPicture != null && currentPicture !== DEFAULT_COVER) {
-      waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
-    }
+    waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
 
     return revalidatePath(`/${userData.username}`);
   },

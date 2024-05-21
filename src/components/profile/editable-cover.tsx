@@ -44,11 +44,11 @@ export function EditableCover({ image }: { image: string }) {
           size={"sm"}
           className="absolute right-2 top-2"
         >
-          <span className="flex items-center gap-1">
+          <span className="flex flex-row">
             {fetching ? (
-              <Loader2 className="size-4 animate-spin" />
+              <Loader2 className="mr-1 size-4 animate-spin" />
             ) : (
-              <Camera className="size-4 " />
+              <Camera className="mr-1 size-4" />
             )}
             change cover
           </span>

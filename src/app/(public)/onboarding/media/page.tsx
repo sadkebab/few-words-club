@@ -137,7 +137,7 @@ export default function Page() {
           </div>
           <p>Profile picture</p>
           <div
-            className="w-full rounded-md border bg-muted/40 bg-cover bg-center"
+            className="w-full rounded-md border bg-muted/40 bg-contain bg-center"
             style={{
               backgroundImage: coverImage ? `url(${coverImage})` : "",
             }}

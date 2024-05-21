@@ -17,6 +17,9 @@ export const UserData = pgTable(
   {
     id: text("id").primaryKey().unique(),
     clerkId: text("clerk_id").notNull(),
+    onboardingCompleted: boolean("onboarding_completed")
+      .notNull()
+      .default(false),
     username: text("username").notNull().unique(),
     picture: text("picture"),
     cover: text("cover"),

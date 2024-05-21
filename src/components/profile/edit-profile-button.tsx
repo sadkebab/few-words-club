@@ -30,6 +30,7 @@ import countries from "@/lib/utils/countries";
 import ReactCountryFlag from "react-country-flag";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+import { safeTrim } from "@/lib/utils";
 
 export function EditProfileButton({
   userData,
@@ -97,8 +98,8 @@ export function EditProfileButton({
   function onSubmit(values: z.infer<typeof UpdateUserDataSchema>) {
     if (fetching) return;
     if (
-      values.bio === userData.bio &&
-      values.displayName === userData.displayName &&
+      safeTrim(values.bio) === userData.bio &&
+      safeTrim(values.displayName) === userData.displayName &&
       values.country === userData.location
     ) {
       toast({
@@ -188,7 +189,7 @@ export function EditProfileButton({
             <DialogFooter>
               <Button type="submit">
                 Save{" "}
-                {fetching && <Loader2 className="ml-2 size-4 animate-spin" />}
+                {fetching && <Loader2 className="ml-1 size-4 animate-spin" />}
               </Button>
             </DialogFooter>
           </form>

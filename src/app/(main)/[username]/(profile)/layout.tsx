@@ -79,10 +79,12 @@ export default async function Layout({
               <p className="text-xs font-medium">Location</p>
               <CountryDisplay location={userData.location} />
             </div>
-            <div className="flex flex-col items-center">
-              <p className="text-xs font-medium">Bio</p>
-              <h4 className="text-sm">{userData.bio ?? "No bio."}</h4>
-            </div>
+            {userData.bio && userData.bio.length > 0 && (
+              <div className="flex flex-col items-center">
+                <p className="text-xs font-medium">Bio</p>
+                <h4 className="text-sm">{userData.bio}</h4>
+              </div>
+            )}
           </div>
         </div>
         <div className="mt-2 flex w-full justify-center">

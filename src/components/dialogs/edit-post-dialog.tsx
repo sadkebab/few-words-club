@@ -92,7 +92,7 @@ export function EditPostDialog({
   function onSubmit(values: z.infer<typeof EditPostSchema>) {
     if (fetching) return;
 
-    if (values.content === post.content) {
+    if (values.content.trim() === post.content) {
       toast({
         title: "No changes",
         description: "You didn't make any changes to the post.",

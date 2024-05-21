@@ -45,13 +45,17 @@ export default clerkMiddleware(async (auth, req) => {
         );
       }
 
-      if (userData && !userData.picture && !isOnboardingMedia(req)) {
+      if (
+        userData &&
+        !userData.onboardingCompleted &&
+        !isOnboardingMedia(req)
+      ) {
         return NextResponse.redirect(
           `${req.nextUrl.protocol}${req.nextUrl.host}/onboarding/media`,
         );
       }
 
-      if (userData?.picture && isOnboardingMedia(req)) {
+      if (userData?.onboardingCompleted && isOnboardingMedia(req)) {
         return NextResponse.redirect(
           `${req.nextUrl.protocol}${req.nextUrl.host}/feed`,
         );
