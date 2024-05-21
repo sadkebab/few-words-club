@@ -9,6 +9,7 @@ import { ActionError } from "@/lib/safe-actions/error";
 import { dispatch } from "@/modules/pusher/server";
 import { z } from "zod";
 import { first } from "@/lib/drizzle";
+import { waitUntil } from "@vercel/functions";
 
 export const clearNotificationAction = userAction(
   NotificationActionSchema,
@@ -30,11 +31,13 @@ export const clearNotificationAction = userAction(
       throw new ActionError("Failed to follow user");
     }
 
-    await dispatch({
-      channel: "notification",
-      event: userData.id,
-      payload: null,
-    });
+    waitUntil(
+      dispatch({
+        channel: "notification",
+        event: userData.id,
+        payload: null,
+      }),
+    );
 
     return {
       cleared: res[0]!.id,
@@ -80,11 +83,13 @@ export const clearAllNotificationsAction = userAction(
       )
       .returning();
 
-    await dispatch({
-      channel: "notification",
-      event: userData.id,
-      payload: null,
-    });
+    waitUntil(
+      dispatch({
+        channel: "notification",
+        event: userData.id,
+        payload: null,
+      }),
+    );
 
     return {
       cleared: res.length,

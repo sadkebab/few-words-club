@@ -206,7 +206,8 @@ export default function Page() {
           </div>
 
           <Button disabled={fetching} onClick={handleSubmit}>
-            Finish {fetching && <Loader2 className="size-4 animate-spin" />}
+            Finish{" "}
+            {fetching && <Loader2 className="ml-2 size-4 animate-spin" />}
           </Button>
         </CardFooter>
       </Card>

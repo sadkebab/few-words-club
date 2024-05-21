@@ -3,6 +3,7 @@ import { db } from "@/modules/db";
 import { Notifications, Posts, UserData } from "@/modules/db/schema";
 import { dispatch } from "@/modules/pusher/server";
 import { eq, and, desc, count } from "drizzle-orm";
+import { waitUntil } from "@vercel/functions";
 
 type LikeNotificationOptions = {
   postId: string;
@@ -56,11 +57,13 @@ export async function sendLikeNotification({
     target: post.authorId,
   });
 
-  await dispatch({
-    channel: "notification",
-    event: post.authorId,
-    payload: null,
-  });
+  waitUntil(
+    dispatch({
+      channel: "notification",
+      event: post.authorId,
+      payload: null,
+    }),
+  );
 }
 
 export async function removeLikeNotification({
@@ -87,11 +90,13 @@ export async function removeLikeNotification({
       ),
     );
 
-  await dispatch({
-    channel: "notification",
-    event: post.authorId,
-    payload: null,
-  });
+  waitUntil(
+    dispatch({
+      channel: "notification",
+      event: post.authorId,
+      payload: null,
+    }),
+  );
 }
 
 type FollowNotificationOptions = {
@@ -123,11 +128,13 @@ export async function sendFollowNotification({
       `Already notified follow, skipping. [${originId} -> ${targetId}]`,
     );
 
-    await dispatch({
-      channel: "notification",
-      event: targetId,
-      payload: null,
-    });
+    waitUntil(
+      dispatch({
+        channel: "notification",
+        event: targetId,
+        payload: null,
+      }),
+    );
 
     return;
   }
@@ -155,11 +162,13 @@ export async function removeFollowNotification({
       ),
     );
 
-  await dispatch({
-    channel: "notification",
-    event: targetId,
-    payload: null,
-  });
+  waitUntil(
+    dispatch({
+      channel: "notification",
+      event: targetId,
+      payload: null,
+    }),
+  );
 }
 
 export async function postNotificationCleanup(postId: string) {
