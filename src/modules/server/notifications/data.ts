@@ -26,7 +26,7 @@ export async function sendLikeNotification({
   );
 
   if (!post) {
-    console.error("Post not found, impossible to send like notification.");
+    console.error("❌ Post not found, impossible to send like notification.");
     return;
   }
 
@@ -45,7 +45,9 @@ export async function sendLikeNotification({
   });
 
   if (alreadyNotified) {
-    console.warn(`Already notified like, skipping. [${userId} -> ${postId}]`);
+    console.warn(
+      `⚠️ Already notified like, skipping. [${userId} -> ${postId}]`,
+    );
     return;
   }
 
@@ -75,7 +77,7 @@ export async function removeLikeNotification({
   });
 
   if (!post) {
-    console.error("Post not found, impossible to remove like notification.");
+    console.error("❌ Post not found, impossible to remove like notification.");
     return;
   }
 
@@ -110,7 +112,7 @@ export async function sendFollowNotification({
   originUsername,
 }: FollowNotificationOptions & { originUsername: string }) {
   if (targetId === originId) {
-    console.warn("User tried to follow themselves, skipping.");
+    console.warn("⚠️ User tried to follow themselves, skipping.");
     return;
   }
 
@@ -125,7 +127,7 @@ export async function sendFollowNotification({
 
   if (alreadyNotified) {
     console.warn(
-      `Already notified follow, skipping. [${originId} -> ${targetId}]`,
+      `⚠️ Already notified follow, skipping. [${originId} -> ${targetId}]`,
     );
 
     waitUntil(

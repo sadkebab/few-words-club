@@ -82,7 +82,6 @@ export const updateUserDataAction = userAction(
 export const skipMediaOnboardingAction = authenticatedAction(
   z.null().optional(),
   async (_, { user }) => {
-    console.log("skipMediaOnboardingAction", user.id);
     const result = await db
       .update(UserData)
       .set({

@@ -63,6 +63,9 @@ export async function safe<T>(resolver: () => Promise<T>) {
   try {
     return await resolver();
   } catch (error) {
+    if (error instanceof Error) {
+      console.error(`❌ [safe interception] ${error.message}`);
+    }
     return undefined;
   }
 }
