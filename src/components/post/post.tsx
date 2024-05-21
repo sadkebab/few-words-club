@@ -50,12 +50,7 @@ export function PostCard({ postData }: { postData: PostData }) {
     <div className="border-b">
       <CardHeader className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-2">
-          <Link
-            className="rounded-md transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-            href={`/${post.author?.username}`}
-          >
-            <UserAvatar userData={post.author} className="size-12" />
-          </Link>
+          <UserAvatar userData={post.author} className="size-12" />
 
           <div className="flex flex-col leading-none">
             <Link href={`/${post.author?.username}`}>
@@ -343,7 +338,7 @@ export function PostSkeleton() {
       </CardHeader>
       <CardContent>
         <Skeleton className="h-6 w-full rounded-sm" />
-        <Skeleton className="mt-1 h-6 w-96 rounded-sm" />
+        <Skeleton className="mt-1 h-6 w-24 rounded-sm sm:w-96" />
       </CardContent>
       <CardFooter className="flex gap-1"></CardFooter>
     </div>

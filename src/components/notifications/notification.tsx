@@ -93,7 +93,7 @@ export function NotificationCardSkeleton() {
   return (
     <div className="flex flex-row items-center gap-2 border-b p-6">
       <Skeleton className="size-8 rounded-full" />
-      <Skeleton className="size-6 w-96" />
+      <Skeleton className="size-6 w-full sm:w-96" />
     </div>
   );
 }

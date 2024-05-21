@@ -64,7 +64,7 @@ const ImageCropper = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[332px] rounded-xl sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Crop Image</DialogTitle>
         </DialogHeader>

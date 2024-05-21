@@ -93,3 +93,5 @@ export async function unreadCounter(userId: string) {
     messages: messages[0]?.count ?? 0,
   };
 }
+
+export type UserData = Awaited<ReturnType<typeof currentUserData>>;

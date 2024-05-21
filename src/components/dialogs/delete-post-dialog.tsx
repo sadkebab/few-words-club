@@ -76,7 +76,7 @@ export function DeletePostDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[332px] rounded-xl sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle
             className="flex items-end gap-2"

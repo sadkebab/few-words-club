@@ -4,6 +4,6 @@
 
 FIX
 
-- unique username error throw
+- polish notification and messageCounters with global state
 - freeze queries in time
 - use timestamp+id as cursor
