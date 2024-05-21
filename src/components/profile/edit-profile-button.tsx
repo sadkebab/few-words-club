@@ -119,7 +119,7 @@ export function EditProfileButton({
           size={"sm"}
           className="absolute right-2 top-2"
         >
-          <Pencil className="mr-1 size-3" /> edit profile
+          <Pencil className="mr-1 size-3" /> edit
         </Button>
       </DialogTrigger>
       <DialogContent>

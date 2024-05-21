@@ -63,7 +63,7 @@ export default async function Layout({
             <Picture image={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)} />
           )}
           <div className="mt-2 flex flex-col items-center gap-2 pb-4">
-            <div className="flex flex-row items-center gap-2">
+            <div className="flex flex-col items-center gap-2 sm:flex-row">
               <h1 className="text-lg font-medium">{userData.displayName}</h1>
               <h2 className="font-light">{`(@${userData.username})`}</h2>
             </div>
@@ -80,9 +80,9 @@ export default async function Layout({
               <CountryDisplay location={userData.location} />
             </div>
             {userData.bio && userData.bio.length > 0 && (
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center px-8">
                 <p className="text-xs font-medium">Bio</p>
-                <h4 className="text-sm">{userData.bio}</h4>
+                <h4 className="text-center text-sm">{userData.bio}</h4>
               </div>
             )}
           </div>

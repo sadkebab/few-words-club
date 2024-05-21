@@ -50,7 +50,7 @@ export function EditableCover({ image }: { image: string }) {
             ) : (
               <Camera className="mr-1 size-4" />
             )}
-            change cover
+            cover
           </span>
         </CropSelector>
       </div>
