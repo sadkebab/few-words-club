@@ -19,7 +19,7 @@ export async function MainLayout({
   return (
     <>
       <div className="fixed -left-1/2 -top-1/2 h-[200vh] w-[200vw] animate-spin-slow bg-confetti bg-cover bg-center bg-no-repeat opacity-50" />
-      <main className="flex min-h-svh w-full">
+      <main className="flex min-h-dvh w-full">
         <div className="flex w-full flex-1 flex-col gap-2 p-2 2xl:container sm:gap-4 sm:p-4">
           <div className="flex w-full flex-1 gap-2 sm:gap-4">
             <div className="z-10 hidden w-[244px] sm:flex lg:w-[458px]">
