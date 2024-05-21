@@ -123,7 +123,10 @@ export const updateProfilePrictureAction = userAction(
       throw new ActionError("Failed to update profile picture");
     }
 
-    waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
+    if (currentPicture != null && currentPicture !== DEFAULT_THUMBNAIL) {
+      waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
+    }
+
     return revalidatePath(`/${userData.username}`);
   },
 );
@@ -143,7 +146,11 @@ export const updateCoverAction = userAction(
     if (result.length === 0) {
       throw new ActionError("Failed to update profile picture");
     }
-    waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
+
+    if (currentPicture != null && currentPicture !== DEFAULT_COVER) {
+      waitUntil(safe(async () => currentPicture && deleteFile(currentPicture)));
+    }
+
     return revalidatePath(`/${userData.username}`);
   },
 );
