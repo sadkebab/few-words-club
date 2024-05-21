@@ -11,7 +11,7 @@ import Link from "next/link";
 
 export default async function Page() {
   return (
-    <div className="flex min-h-screen w-full items-center justify-center p-6">
+    <div className="flex min-h-svh w-full items-center justify-center p-6">
       <Card className="flex h-fit w-[456px] flex-col" backdrop>
         <CardHeader className="">
           <CardTitle>about fewwordsclub.com...</CardTitle>

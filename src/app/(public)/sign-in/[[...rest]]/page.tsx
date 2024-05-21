@@ -19,7 +19,7 @@ export default function Page() {
   }, [theme]);
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center gap-2">
+    <main className="flex min-h-svh w-full flex-col items-center justify-center gap-2">
       <SignIn appearance={appearance} />
     </main>
   );
