@@ -20,10 +20,14 @@ import {
 } from "@/components/ui/popover";
 import { useMemo } from "react";
 
-type ComboboxProps = React.ComponentProps<typeof CommandInput> & {
+type ComboboxProps = Omit<
+  React.ComponentProps<typeof CommandInput>,
+  "value"
+> & {
   options: { value: string; label: string; icon?: React.ReactNode }[];
   emptyText?: string;
   selectText?: string;
+  value?: string;
   onChange: (value: string | undefined) => void;
 };
 
@@ -32,11 +36,11 @@ export function Combobox({
   emptyText,
   selectText,
   onChange,
-  value: _,
+  value: _value,
   ...props
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState<string>(_value ?? "");
   const _emptyText = emptyText ?? "No options found.";
   const _selectText = selectText ?? "Select an option...";
 

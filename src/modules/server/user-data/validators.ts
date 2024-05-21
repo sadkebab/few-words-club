@@ -28,6 +28,19 @@ export const SaveUserSchema = z.object({
     .optional(),
 });
 
+export const UpdateUserDataSchema = z.object({
+  displayName: z.string().min(2, {
+    message: "Display name must be at least 2 characters.",
+  }),
+  country: z.string().optional(),
+  bio: z
+    .string()
+    .max(200, {
+      message: "The bio must be below 200 characters.",
+    })
+    .optional(),
+});
+
 export const SaveUserMediaSchema = z.object({
   cover: z.string().optional(),
   picture: z.string(),

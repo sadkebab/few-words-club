@@ -19,6 +19,7 @@ import { Cover } from "@/components/profile/cover";
 import { Picture } from "@/components/profile/picture";
 import { EditableCover } from "@/components/profile/editable-cover";
 import { EditablePicture } from "@/components/profile/editable-picture";
+import { EditProfileButton } from "@/components/profile/edit-profile-button";
 
 export default async function Layout({
   children,
@@ -50,11 +51,14 @@ export default async function Layout({
         <Cover image={backgroundImage} />
       )}
       <div className="flex w-full flex-1 flex-col bg-gradient-to-b from-background to-transparent">
-        <div className="flex w-full flex-col items-center">
+        <div className="relative flex w-full flex-col items-center">
           {isProfile ? (
-            <EditablePicture
-              image={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)}
-            />
+            <>
+              <EditablePicture
+                image={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)}
+              />
+              <EditProfileButton userData={userData} />
+            </>
           ) : (
             <Picture image={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)} />
           )}

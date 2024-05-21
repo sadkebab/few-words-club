@@ -5,6 +5,7 @@ import {
   SaveUserMediaSchema,
   SaveUserSchema,
   UpdateMediaSchema,
+  UpdateUserDataSchema,
 } from "./validators";
 import { authenticatedAction, userAction } from "@/lib/safe-actions";
 import { ActionError } from "@/lib/safe-actions/error";
@@ -38,6 +39,27 @@ export const saveUserDataAction = authenticatedAction(
     }
 
     return { created: result[0]!.id };
+  },
+);
+
+export const updateUserDataAction = userAction(
+  UpdateUserDataSchema,
+  async ({ displayName, country: location, bio }, { userData }) => {
+    const result = await db
+      .update(UserData)
+      .set({
+        displayName,
+        location,
+        bio,
+      })
+      .where(eq(UserData.id, userData.id))
+      .returning();
+
+    if (result.length === 0) {
+      throw new ActionError("Failed to save user data");
+    }
+
+    return revalidatePath(`/${userData.username}`);
   },
 );
 
