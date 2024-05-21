@@ -32,3 +32,7 @@ export const SaveUserMediaSchema = z.object({
   cover: z.string().optional(),
   picture: z.string(),
 });
+
+export const UpdateMediaSchema = z.object({
+  source: z.string(),
+});

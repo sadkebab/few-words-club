@@ -13,58 +13,15 @@ import { Separator } from "@/components/ui/separator";
 import { SkipMediaButton } from "./skip-media-button";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { fileUploadUrlAction } from "@/modules/server/files/actions";
 import { toast } from "@/components/ui/use-toast";
 import { saveUserMediaAction } from "@/modules/server/user-data/actions";
 import { useAction } from "next-safe-action/hooks";
 
-import CropSelector from "./crop-selector";
+import CropSelector from "../../../../components/media/crop-selector";
 import { COVER_IMAGE_SIZE, PROFILE_IMAGE_SIZE } from "@/lib/constats";
 import { UserDataMediaValidator } from "@/modules/server/files/validators";
 import { fileFromBase64 } from "@/lib/utils/b64";
-
-async function uploadFile(file: File, type: "thumb" | "cover") {
-  const { data, serverError, validationErrors } = await fileUploadUrlAction({
-    key: file.name,
-    type: type,
-    contentType: file.type,
-  });
-
-  if (serverError) {
-    toast({
-      title: `URL signature failed for ${file.name}`,
-      description: serverError,
-    });
-    throw new Error("upload failure");
-  }
-
-  if (validationErrors) {
-    toast({
-      title: `Validation error for ${file.name}`,
-      description: JSON.stringify(validationErrors),
-    });
-    throw new Error("upload failure");
-  }
-
-  if (!data) {
-    throw new Error("upload failure");
-  }
-
-  const response = await fetch(data.url, {
-    method: "PUT",
-    body: file,
-  });
-
-  if (!response.ok) {
-    toast({
-      title: `Upload failed for ${file.name}`,
-      description: `Response status: ${response.status}`,
-    });
-    throw new Error("upload failure");
-  }
-
-  return data.key;
-}
+import { uploadFile } from "@/lib/upload";
 
 export default function Page() {
   const [profileImage, setCroppedImage] = useState<string>();
@@ -168,8 +125,12 @@ export default function Page() {
             <CropSelector
               aspect={PROFILE_IMAGE_SIZE.ratio}
               toHeight={PROFILE_IMAGE_SIZE.height}
-              className="size-24 rounded-full"
               onCrop={setCroppedImage}
+              variant={"unstyled"}
+              size={"unsized"}
+              className={
+                "size-24 rounded-full hover:bg-none hover:backdrop-blur-xs"
+              }
             >
               <Camera className="fill-background/40 stroke-foreground/60" />
             </CropSelector>
@@ -184,7 +145,9 @@ export default function Page() {
             <CropSelector
               aspect={COVER_IMAGE_SIZE.ratio}
               toHeight={COVER_IMAGE_SIZE.height}
-              className="size-24 w-full"
+              variant={"unstyled"}
+              size={"unsized"}
+              className={"size-24 w-full hover:bg-none hover:backdrop-blur-xs"}
               onCrop={setCoverImage}
             >
               <Camera className="fill-background/40 stroke-foreground/60" />
@@ -207,7 +170,7 @@ export default function Page() {
 
           <Button disabled={fetching} onClick={handleSubmit}>
             Finish{" "}
-            {fetching && <Loader2 className="ml-2 size-4 animate-spin" />}
+            {fetching && <Loader2 className="ml-1 size-4 animate-spin" />}
           </Button>
         </CardFooter>
       </Card>

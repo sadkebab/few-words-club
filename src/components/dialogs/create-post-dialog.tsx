@@ -116,8 +116,9 @@ export function CreatePostDialog({
               )}
             />
             <DialogFooter>
-              <Button className="flex items-center gap-2" type="submit">
-                Post {fetching && <Loader2 className="size-4 animate-spin" />}
+              <Button type="submit">
+                Post{" "}
+                {fetching && <Loader2 className="ml-1 size-4 animate-spin" />}
               </Button>
             </DialogFooter>
           </form>

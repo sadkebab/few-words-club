@@ -13,13 +13,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cropImage } from "@/lib/crop";
-import { cn } from "@/lib/utils";
 
 const ImageUploadingButton = ({
   value,
   onChange,
   children,
-  className,
   ...props
 }: Omit<ComponentProps<typeof Button>, "value" | "onChange"> & {
   value: ComponentProps<typeof ImageUploading>["value"];
@@ -29,9 +27,6 @@ const ImageUploadingButton = ({
     <ImageUploading value={value} onChange={onChange}>
       {({ onImageUpload, onImageUpdate }) => (
         <Button
-          variant={"unstyled"}
-          size={"unsized"}
-          className={cn("hover:bg-none hover:backdrop-blur-xs", className)}
           onClick={value ? onImageUpload : () => onImageUpdate(0)}
           {...props}
         >
@@ -119,15 +114,15 @@ export default function CropSelector({
   aspect,
   toHeight,
   children,
-  className,
   onCrop,
+  ...props
 }: {
   aspect: number;
   toHeight: number;
   children: React.ReactNode;
   className?: string;
   onCrop: (image: string) => void;
-}) {
+} & Omit<ComponentProps<typeof Button>, "value" | "onChange">) {
   const [image, setImage] = useState<ImageType[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -135,11 +130,11 @@ export default function CropSelector({
     <>
       <ImageUploadingButton
         value={image}
-        className={className}
         onChange={(newImage) => {
           setDialogOpen(true);
           setImage(newImage);
         }}
+        {...props}
       >
         {children}
       </ImageUploadingButton>
@@ -155,17 +150,6 @@ export default function CropSelector({
               onCrop(image);
               setDialogOpen(false);
             }
-            // setCroppedImage(image);
-            // console.log(image);
-            // if (image) {
-            //   const file = await fileFromBase64(image, {
-            //     name: "image.jpg",
-            //     type: "image/jpeg",
-            //   });
-            //   const s = await uploadFile(file, "thumb");
-            //   console.log("file key", s);
-            // }
-            // setDialogOpen(false);
           });
         }}
       />

@@ -166,8 +166,8 @@ export function OnboardingForm() {
           )}
         />
 
-        <Button type="submit" className="flex items-center gap-2">
-          Save {fetching && <Loader2 className="size-4 animate-spin" />}
+        <Button type="submit">
+          Save {fetching && <Loader2 className="ml-1 size-4 animate-spin" />}
         </Button>
       </form>
     </Form>

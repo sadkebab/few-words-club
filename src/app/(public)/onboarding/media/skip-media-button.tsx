@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 import { skipMediaOnboardingAction } from "@/modules/server/user-data/actions";
 import { Loader2 } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type ActionButtonProps = Omit<ComponentProps<typeof Button>, "onClick">;
 
@@ -60,12 +59,8 @@ export function SkipMediaButton({
   });
 
   return (
-    <Button
-      {...props}
-      className={cn("flex items-center gap-2", className)}
-      onClick={() => execute(null)}
-    >
-      {children} {fetching && <Loader2 className="size-4 animate-spin" />}
+    <Button {...props} className={className} onClick={() => execute(null)}>
+      {children} {fetching && <Loader2 className="ml-1 size-4 animate-spin" />}
     </Button>
   );
 }

@@ -1,5 +1,4 @@
 import { ProfileSectionButton } from "@/components/client-buttons";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { safe } from "@/lib/safe-actions";
 import { db } from "@/modules/db";
 import {
@@ -16,6 +15,10 @@ import countries from "@/lib/utils/countries";
 import { Globe2 } from "lucide-react";
 import ReactCountryFlag from "react-country-flag";
 import { mediaUrl } from "@/lib/utils/urls";
+import { Cover } from "@/components/profile/cover";
+import { Picture } from "@/components/profile/picture";
+import { EditableCover } from "@/components/profile/editable-cover";
+import { EditablePicture } from "@/components/profile/editable-picture";
 
 export default async function Layout({
   children,
@@ -41,17 +44,20 @@ export default async function Layout({
   const backgroundImage = `url('${mediaUrl(userData.cover ?? DEFAULT_COVER)}')`;
   return (
     <div className="flex-1t flex w-full flex-col">
-      <div className="w-full bg-cover bg-center" style={{ backgroundImage }}>
-        <div className="h-48"></div>
-      </div>
+      {isProfile ? (
+        <EditableCover image={backgroundImage} />
+      ) : (
+        <Cover image={backgroundImage} />
+      )}
       <div className="flex w-full flex-1 flex-col bg-gradient-to-b from-background to-transparent">
         <div className="flex w-full flex-col items-center">
-          <Avatar className="-mt-[4.5rem] size-36 border-4 border-background">
-            <AvatarImage
-              src={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)}
+          {isProfile ? (
+            <EditablePicture
+              image={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)}
             />
-            <AvatarFallback>{userData.displayName?.slice(0, 2)}</AvatarFallback>
-          </Avatar>
+          ) : (
+            <Picture image={mediaUrl(userData.picture ?? DEFAULT_THUMBNAIL)} />
+          )}
           <div className="mt-2 flex flex-col items-center gap-2 pb-4">
             <div className="flex flex-row items-center gap-2">
               <h1 className="text-lg font-medium">{userData.displayName}</h1>
@@ -68,7 +74,6 @@ export default async function Layout({
             <div className="mt-4 flex flex-col items-center">
               <p className="text-xs font-medium">Location</p>
               <CountryDisplay location={userData.location} />
-              {/* <h3 className="text-sm">{userData.location ?? "Unknown"}</h3> */}
             </div>
             <div className="flex flex-col items-center">
               <p className="text-xs font-medium">Bio</p>

@@ -130,8 +130,9 @@ export function EditPostDialog({
               )}
             />
             <DialogFooter>
-              <Button className="flex items-center gap-2" type="submit">
-                Update {fetching && <Loader2 className="size-4 animate-spin" />}
+              <Button type="submit">
+                Update{" "}
+                {fetching && <Loader2 className="ml-1 size-4 animate-spin" />}
               </Button>
             </DialogFooter>
           </form>
