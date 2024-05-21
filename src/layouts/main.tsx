@@ -28,7 +28,7 @@ export async function MainLayout({
               </div>
             </div>
             <div className="flex flex-1 bg-background">
-              <div className="flex max-h-[calc(100vh-5rem)] flex-1 flex-nowrap overflow-y-scroll rounded-xl border backdrop-blur-md sm:max-h-[calc(100vh-2rem)]">
+              <div className="flex max-h-[calc(100dvh-5rem)] flex-1 flex-nowrap overflow-y-scroll rounded-xl border backdrop-blur-md sm:max-h-[calc(100dvh-2rem)]">
                 {children}
               </div>
             </div>
