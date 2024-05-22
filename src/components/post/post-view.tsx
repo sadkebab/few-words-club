@@ -1,7 +1,7 @@
 "use client";
 
 import { type PostData } from "@/modules/server/posts/data";
-import { PostCard } from "@/components/post/post";
+import { PostCard } from "@/components/post/post-card";
 import { PostContextProvider } from "@/components/post/context";
 import { api } from "@/modules/trpc/react";
 import { Fragment, useEffect } from "react";
@@ -20,7 +20,7 @@ export function PostView({
 }) {
   return (
     <PostContextProvider viewerId={viewerId} cursorDate={new Date()}>
-      <PostCard postData={postData} />
+      <PostCard post={postData} />
       <PostLikes
         postId={postData.id}
         pageSize={QUERY_PAGE_SIZE}

@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import {
   Bell,
   Mail,
-  Globe2,
   UsersRound,
   Origami,
   PenBox,

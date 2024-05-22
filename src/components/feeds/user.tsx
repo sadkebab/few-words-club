@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useEffect } from "react";
-import { PostCard, PostSkeleton } from "../post/post";
+import { PostCard, PostSkeleton } from "../post/post-card";
 import { api } from "@/modules/trpc/react";
 import { toast } from "@/components/ui/use-toast";
 import { QueryTrigger } from "../post/trigger";
@@ -23,6 +23,7 @@ export function UserFeed({
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
+        staleTime: 1000 * 60 * 1,
       },
     );
 
@@ -50,7 +51,7 @@ export function UserFeed({
           {data.pages.map((group, i) => (
             <Fragment key={i}>
               {group.data.map((post) => (
-                <PostCard postData={post} key={post.id} />
+                <PostCard post={post} key={post.id} />
               ))}
             </Fragment>
           ))}

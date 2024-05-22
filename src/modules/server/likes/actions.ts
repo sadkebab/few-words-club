@@ -37,7 +37,7 @@ export const likePostAction = userAction(
 
     if (already) {
       return {
-        liked: already.id,
+        liked: true,
       };
     }
 
@@ -57,7 +57,7 @@ export const likePostAction = userAction(
     await sendLikeNotification({ postId, userId: userData.id });
 
     return {
-      like: res[0]!.id,
+      liked: true,
     };
   },
 );

@@ -103,4 +103,18 @@ export const postsRouter = createTRPCRouter({
       });
       return res;
     }),
+  test: publicProcedure
+    .input(
+      z.object({
+        cursor: z.number().nullish(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const { cursor } = input;
+      console.log("loading", cursor);
+      return {
+        data: [new Date().toISOString()],
+        nextCursor: cursor ? cursor + 1 : 0,
+      };
+    }),
 });

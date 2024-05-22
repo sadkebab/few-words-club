@@ -22,6 +22,7 @@ export function NotificationList({ pageSize }: { pageSize: number }) {
       },
       {
         getNextPageParam: (lastPage) => lastPage.nextCursor,
+        staleTime: 1000 * 60 * 1,
       },
     );
 
@@ -62,7 +63,7 @@ export function NotificationList({ pageSize }: { pageSize: number }) {
             <Fragment key={i}>
               {group.data.map((notification) => (
                 <NotificationCard
-                  notificationData={notification}
+                  notification={notification}
                   key={notification.id}
                 />
               ))}

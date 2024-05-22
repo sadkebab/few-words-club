@@ -2,7 +2,7 @@
 import useRealTimeEvent from "@/modules/pusher/client";
 import { api } from "@/modules/trpc/react";
 import { Badge } from "./ui/badge";
-import { notificationCounterStore } from "@/modules/client-state/counters";
+import { notificationCounterStore } from "@/modules/stores/counters";
 import { useEffect } from "react";
 
 export function NotificationCounter({

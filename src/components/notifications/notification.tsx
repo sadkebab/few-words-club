@@ -5,43 +5,29 @@ import { Skeleton } from "../ui/skeleton";
 import { Heart, UserPlus2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { api } from "@/modules/trpc/react";
 import { useAction } from "next-safe-action/hooks";
 import { clearNotificationAction } from "@/modules/server/notifications/actions";
 import { useState } from "react";
-import { notificationCounterStore } from "@/modules/client-state/counters";
+import { notificationCounterStore } from "@/modules/stores/counters";
 import { UserAvatar } from "../user-avatar";
 
 export function NotificationCard({
-  notificationData,
+  notification,
 }: {
-  notificationData: NotificationData;
+  notification: NotificationData;
 }) {
   const [fetching, setFetching] = useState(false);
-  const { decrease } = notificationCounterStore((state) => state);
-  const { data: notification, refetch } = api.notifications.single.useQuery(
-    {
-      notificationId: notificationData.id,
-    },
-    {
-      initialData: notificationData,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
-  );
+  const { decrease, increase } = notificationCounterStore((state) => state);
   const [optimisticSeen, setOptimisticSeen] = useState(notification.seen);
 
   const { execute: clear } = useAction(clearNotificationAction, {
     onExecute: () => {
       setFetching(true);
       setOptimisticSeen(true);
-    },
-    onSuccess: async () => {
-      await refetch();
+      decrease();
     },
     onError: () => {
-      setFetching(false);
+      increase();
     },
     onSettled: () => {
       setFetching(false);
@@ -50,7 +36,6 @@ export function NotificationCard({
 
   const handleClear = async () => {
     if (fetching || notification.seen) return;
-    decrease();
     clear({ notificationId: notification.id });
   };
 

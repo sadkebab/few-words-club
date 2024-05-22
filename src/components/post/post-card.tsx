@@ -8,9 +8,8 @@ import { Button } from "../ui/button";
 import { usePostContext } from "./context";
 import { useAction } from "next-safe-action/hooks";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "../ui/use-toast";
-import { api } from "@/modules/trpc/react";
 import { Skeleton } from "../ui/skeleton";
 import { humanDateDiff } from "@/lib/react/date";
 import { CounterLabel } from "../counter";
@@ -26,23 +25,7 @@ import {
 } from "@/modules/server/saves/actions";
 import { UserAvatar } from "../user-avatar";
 
-export function PostCard({ postData }: { postData: PostData }) {
-  const { data: post, refetch } = api.posts.single.useQuery(
-    {
-      postId: postData.id,
-    },
-    {
-      initialData: postData,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-    },
-  );
-
-  const utils = api.useUtils();
-  const abort = async () => {
-    await utils.posts.single.cancel();
-  };
+export function PostCard({ post }: { post: PostData }) {
   const { viewerId, cursorDate } = usePostContext();
   const canEdit = viewerId === post.author?.id;
 
@@ -85,15 +68,11 @@ export function PostCard({ postData }: { postData: PostData }) {
               liked={post.liked}
               postId={post.id}
               count={post.likeCount}
-              refetch={refetch}
-              abort={abort}
             />
             <SaveButton
               saved={post.saved}
               postId={post.id}
               count={post.saveCount}
-              refetch={refetch}
-              abort={abort}
             />{" "}
           </>
         ) : (
@@ -121,23 +100,26 @@ function LikeButton({
   liked,
   postId,
   count,
-  refetch,
-  abort,
 }: {
   liked: boolean;
   postId: string;
   count: number;
-  refetch: () => void;
-  abort: () => void;
 }) {
   const [optimisticLike, setOptimisticLike] = useState(liked);
   const [optimisticCount, setOptimisticCount] = useState(count);
 
+  useEffect(() => {
+    setOptimisticLike(liked);
+  }, [liked]);
+
+  useEffect(() => {
+    setOptimisticCount(count);
+  }, [count]);
+
   const { execute: like } = useAction(likePostAction, {
     onExecute: () => {
-      abort();
       setOptimisticLike(true);
-      setOptimisticCount((prev) => prev + 1);
+      setOptimisticCount((c) => c + 1);
     },
     onError: ({ fetchError, serverError, validationErrors }) => {
       if (serverError) {
@@ -158,9 +140,8 @@ function LikeButton({
           content: JSON.stringify(validationErrors),
         });
       }
-    },
-    onSettled: () => {
-      refetch();
+      setOptimisticLike(false);
+      setOptimisticCount((c) => c - 1);
     },
   });
 
@@ -170,9 +151,8 @@ function LikeButton({
 
   const { execute: unlike } = useAction(unlikePostAction, {
     onExecute: () => {
-      abort();
       setOptimisticLike(false);
-      setOptimisticCount((prev) => prev - 1);
+      setOptimisticCount((c) => c - 1);
     },
     onError: ({ fetchError, serverError, validationErrors }) => {
       if (serverError) {
@@ -193,9 +173,8 @@ function LikeButton({
           content: JSON.stringify(validationErrors),
         });
       }
-    },
-    onSettled: () => {
-      refetch();
+      setOptimisticLike(true);
+      setOptimisticCount((c) => c + 1);
     },
   });
 
@@ -226,23 +205,26 @@ function SaveButton({
   saved,
   postId,
   count,
-  refetch,
-  abort,
 }: {
   saved: boolean;
   postId: string;
   count: number;
-  refetch: () => void;
-  abort: () => void;
 }) {
   const [optimisticSave, setOptimisticSave] = useState(saved);
   const [optimisticCount, setOptimisticCount] = useState(count);
 
+  useEffect(() => {
+    setOptimisticSave(saved);
+  }, [saved]);
+
+  useEffect(() => {
+    setOptimisticCount(count);
+  }, [count]);
+
   const { execute: save } = useAction(savePostAction, {
     onExecute: () => {
-      abort();
       setOptimisticSave(true);
-      setOptimisticCount((prev) => prev + 1);
+      setOptimisticCount((c) => c + 1);
     },
     onError: ({ fetchError, serverError, validationErrors }) => {
       if (serverError) {
@@ -263,9 +245,8 @@ function SaveButton({
           content: JSON.stringify(validationErrors),
         });
       }
-    },
-    onSettled: () => {
-      refetch();
+      setOptimisticSave(false);
+      setOptimisticCount((c) => c - 1);
     },
   });
 
@@ -275,9 +256,8 @@ function SaveButton({
 
   const { execute: unsave } = useAction(unsavePostAction, {
     onExecute: () => {
-      abort();
       setOptimisticSave(false);
-      setOptimisticCount((prev) => prev - 1);
+      setOptimisticCount((c) => c - 1);
     },
     onError: ({ fetchError, serverError, validationErrors }) => {
       if (serverError) {
@@ -298,11 +278,11 @@ function SaveButton({
           content: JSON.stringify(validationErrors),
         });
       }
-    },
-    onSettled: () => {
-      refetch();
+      setOptimisticSave(true);
+      setOptimisticCount((c) => c + 1);
     },
   });
+
   const handleUnsave = useCallback(() => {
     unsave({ postId });
   }, [postId, unsave]);

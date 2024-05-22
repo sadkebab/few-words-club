@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import { db } from "@/modules/db";
 import { Likes, Posts } from "@/modules/db/schema";
-import { count, eq, notInArray } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 /**
  * select fwc_posts.id, fwc_posts.like_count, count(fwc_likes.*) from fwc_posts

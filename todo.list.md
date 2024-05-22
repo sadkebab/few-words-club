@@ -1,5 +1,8 @@
+- Tag
+- Mentions
+- Comments
 - Direct Messages
-- User Reccomendations
+- Trending
 - Search
 
 FIX

@@ -130,7 +130,11 @@ export async function followedFeedPaginated({
   userId: string;
   limit: number;
   offset: number;
-}): Promise<{ data: PostData[]; nextCursor: number | null }> {
+}): Promise<{
+  data: PostData[];
+  nextCursor: number | null;
+  cursor: number | null;
+}> {
   const viewerId = (await safe(currentUserData))?.id;
   const qb = new QueryBuilder();
   const isSaved = inArray(
@@ -157,7 +161,11 @@ export async function followedFeedPaginated({
 
   const next = offset + limit;
 
-  return { data: posts, nextCursor: next >= total ? null : next };
+  return {
+    data: posts,
+    cursor: offset,
+    nextCursor: next >= total ? null : next,
+  };
 }
 
 export async function savedFeedPaginated({
